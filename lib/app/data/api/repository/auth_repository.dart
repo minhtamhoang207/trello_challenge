@@ -1,29 +1,15 @@
-import 'package:trello_challenge/app/data/api/rest_client.dart';
+import 'package:trello_challenge/app/data/api/base_provider.dart';
+import 'package:trello_challenge/app/data/api/provider/auth_provider.dart';
 
-class AuthRepository extends RestClient{
+class AuthRepository extends BaseProvider{
+  AuthRepository({required this.authProvider});
+  final AuthProvider authProvider;
 
-
-  Future<String> login(String userName, String password) async {
-    final res = await request(
-        'url',
-        Method.post,
-        {
-          'userName': userName,
-          'password': password
-        }
+  Future<String> getUser() async {
+    final res = await authProvider.getUser(
+        '/users',
     );
-    return res.toString();
-  }
-  
-  Future<String> getUser()async{
-    final res = await request(
-        'https://jsonplaceholder.typicode.com/users',
-        Method.get,
-        {}
-    );
-    print("hehehehehehehehehehehehehe");
-    print(res);
-    print("hehehehehehehehehehehehehe");
+    print(res.toString());
     return res.toString();
   }
 //

@@ -1,3 +1,3 @@
 class ApiConstants {
-  static const baseUrl = 'https://reqres.in';
+  static const baseUrl = 'https://jsonplaceholder.typicode.com';
 }
