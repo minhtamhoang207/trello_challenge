@@ -1,8 +1,9 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:trello_challenge/di.dart';
-import 'app/routes/app_pages.dart';
+import 'package:trello_challenge/routes/app_pages.dart';
 import 'app_binding.dart';
 
 void main() async {
@@ -19,12 +20,18 @@ class App extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: true,
-      initialRoute: Routes.INITIAL,
+      initialRoute: Routes.splash,
       defaultTransition: Transition.fade,
       getPages: AppPages.pages,
       initialBinding: AppBinding(),
       smartManagement: SmartManagement.keepFactory,
-      builder: EasyLoading.init(),
+      navigatorObservers: [BotToastNavigatorObserver()],
+      theme: ThemeData(
+        textTheme: GoogleFonts.beVietnamProTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
+      builder: BotToastInit(),
     );
   }
 }

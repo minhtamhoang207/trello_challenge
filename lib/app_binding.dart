@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:trello_challenge/app/data/api/base_provider.dart';
-import 'package:trello_challenge/app/data/api/provider/auth_provider.dart';
-import 'package:trello_challenge/app/data/api/repository/auth_repository.dart';
+
+import 'data/api/provider/auth_provider.dart';
+import 'data/api/repository/auth_repository.dart';
 
 class AppBinding extends Bindings {
   @override
