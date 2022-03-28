@@ -2,11 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:trello_challenge/gen/assets.gen.dart';
 import 'package:trello_challenge/modules/login/login_controller.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
+import 'package:trello_challenge/shared/enums/dialog_type.dart';
 import 'package:trello_challenge/shared/utils/common_widget.dart';
+import 'package:trello_challenge/shared/widgets/custom_dialog.dart';
 import 'package:trello_challenge/shared/widgets/input_field.dart';
 
 class LoginScreen extends GetView<LoginController> {
@@ -17,7 +20,7 @@ class LoginScreen extends GetView<LoginController> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: AppColor.authColor,
+        backgroundColor: AppColor.primaryColor,
         body: _buildWidget(context),
       ),
     );
@@ -26,34 +29,27 @@ class LoginScreen extends GetView<LoginController> {
   Widget _buildWidget(BuildContext context) {
     return ListView(
       children: [
-        Image.asset(
-          Assets.images.imgLogin.path,
+        Lottie.asset(
+          Assets.lotties.imgLogin,
           height: Get.height / 3.3,
-          width: Get.width,
-          fit: BoxFit.fill,
         ),
-        InkWell(
-          onTap: () {
-            //Scrollable.ensureVisible(dataKey.currentContext!);
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 23, top: 20),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Đăng nhập',
-                style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.primaryColor),
-              ),
+        Padding(
+          padding: const EdgeInsets.only(left: 23, top: 20),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Đăng nhập',
+              style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.darkLiver),
             ),
           ),
         ),
         Neumorphic(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
             style: NeumorphicStyle(
-              color: AppColor.authColor,
+              color: AppColor.primaryColor,
               boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)),
               depth: -3,
               shadowLightColorEmboss: AppColor.darkGray.withOpacity(0.4),
@@ -69,7 +65,7 @@ class LoginScreen extends GetView<LoginController> {
         Neumorphic(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             style: NeumorphicStyle(
-              color: AppColor.authColor,
+              color: AppColor.primaryColor,
               boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(30)),
               depth: -3,
               shadowLightColorEmboss: AppColor.darkGray.withOpacity(0.4),
@@ -91,31 +87,28 @@ class LoginScreen extends GetView<LoginController> {
               style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
-                  color: AppColor.primaryColor),
+                  color: AppColor.darkLiver),
             ),
           ),
         ),
         NeumorphicButton(
           margin: const EdgeInsets.only(left: 50, right: 50, top: 30),
           style: NeumorphicStyle(
-            color: AppColor.authColor,
+            color: AppColor.primaryColor,
             boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
             depth: 4,
             shadowLightColor: AppColor.darkGray.withOpacity(0.3),
           ),
           onPressed: () async {
-            CommonWidget.showLoading();
-            await Future.delayed(const Duration(seconds: 3));
-            Get.toNamed(Routes.home);
-            CommonWidget.hideLoading();
+            await controller.login();
           },
           child: Center(
             child: Text(
               'Đăng nhập',
               style: TextStyle(
-                  color: AppColor.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15),
+                  color: AppColor.darkLiver,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.5),
             ),
           ),
         ),
@@ -134,7 +127,7 @@ class LoginScreen extends GetView<LoginController> {
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: AppColor.primaryColor),
+                      color: AppColor.darkLiver),
                 )
               ])),
             ),

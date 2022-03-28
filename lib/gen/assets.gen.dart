@@ -15,6 +15,16 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/img_login.jpg');
 }
 
+class $AssetsLottiesGen {
+  const $AssetsLottiesGen();
+
+  /// File path: assets/lotties/img_login.json
+  String get imgLogin => 'assets/lotties/img_login.json';
+
+  /// File path: assets/lotties/lottie_loading.json
+  String get lottieLoading => 'assets/lotties/lottie_loading.json';
+}
+
 class $AssetsSvgsGen {
   const $AssetsSvgsGen();
 
@@ -23,12 +33,19 @@ class $AssetsSvgsGen {
 
   /// File path: assets/svgs/ic_person.svg
   String get icPerson => 'assets/svgs/ic_person.svg';
+
+  /// File path: assets/svgs/ic_success.svg
+  String get icSuccess => 'assets/svgs/ic_success.svg';
+
+  /// File path: assets/svgs/ic_warning.svg
+  String get icWarning => 'assets/svgs/ic_warning.svg';
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
   static const $AssetsSvgsGen svgs = $AssetsSvgsGen();
 }
 

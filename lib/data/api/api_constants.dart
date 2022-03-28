@@ -1,3 +1,3 @@
 class ApiConstants {
-  static const baseUrl = 'https://jsonplaceholder.typicode.com';
+  static const baseUrl = 'https://t.itptit.com/api/v1/';
 }

@@ -1,0 +1,220 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trello_challenge/modules/profile/profile_controller.dart';
+import 'package:trello_challenge/routes/app_pages.dart';
+import 'package:trello_challenge/shared/constants/colors.dart';
+import 'package:trello_challenge/shared/constants/storage.dart';
+
+class ProfileScreen extends GetView<ProfileController> {
+  const ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: AppColor.primaryColor,
+      body: controller.obx(
+        (state)=>RefreshIndicator(
+          onRefresh: () async {
+            controller.loadUser();
+          },
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 10, top: 20, bottom: 8),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: NeumorphicButton(
+                    style: NeumorphicStyle(
+                        color: AppColor.primaryColor,
+                        boxShape: const NeumorphicBoxShape.circle(),
+                        depth: 3,
+                        shadowLightColor: AppColor.white,
+                        intensity: 20,
+                        lightSource: LightSource.topLeft),
+                    onPressed: () {
+
+                    },
+                    child: const Icon(Icons.edit_outlined),
+                  ),
+                ),
+              ),
+              Center(
+                child: NeumorphicButton(
+                    style: NeumorphicStyle(
+                        color: AppColor.primaryColor,
+                        boxShape: const NeumorphicBoxShape.circle(),
+                        depth: 4,
+                        shadowLightColor: AppColor.white,
+                        intensity: 100,
+                        lightSource: LightSource.topLeft),
+                    onPressed: () {},
+                    child: const SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c80'
+                              '97d09144b/446_167_3683_2210/master/3683.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=49ed3252c0b2ffb49cf8b508892e452d',
+                        ),
+                      ),
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 23, top: 10, left: 23),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    '${controller.name.value}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: AppColor.darkLiver),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 23, top: 8, left: 23),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    '( Tom paid )',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w600,
+                        color: AppColor.darkLiver.withOpacity(0.8)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 23, top: 20, left: 23),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    '" Yêu màu hồng ghét sự giả dối, hoa rơi cửa phật 1 quật 500 "',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 13.5,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w500,
+                        color: AppColor.darkLiver),
+                  ),
+                ),
+              ),
+              const Divider(thickness: 2),
+              Padding(
+                padding: const EdgeInsets.only(right: 23, top: 30, left: 23),
+                child: NeumorphicButton(
+                  style: NeumorphicStyle(
+                      color: AppColor.primaryColor,
+                      depth: 4,
+                      shadowLightColor: AppColor.white,
+                      intensity: 100,
+                      lightSource: LightSource.topLeft),
+                  onPressed: () {},
+                  child: Row(
+                    children: [
+                      const Icon(CupertinoIcons.at),
+                      const Gap(10),
+                      Text(
+                        'minhtamhoang207@gmail.com',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.darkLiver),
+                      )
+                    ],
+                  ),),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 23, top: 30, left: 23),
+                child: NeumorphicButton(
+                  style: NeumorphicStyle(
+                      color: AppColor.primaryColor,
+                      depth: 4,
+                      shadowLightColor: AppColor.white,
+                      intensity: 100,
+                      lightSource: LightSource.topLeft),
+                  onPressed: () {},
+                  child: Row(
+                    children: [
+                      const Icon(CupertinoIcons.square_list),
+                      const Gap(10),
+                      Text(
+                        'Công việc của tôi',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.darkLiver),
+                      )
+                    ],
+                  ),),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 23, top: 30, left: 23),
+                child: NeumorphicButton(
+                  style: NeumorphicStyle(
+                      color: AppColor.primaryColor,
+                      depth: 4,
+                      shadowLightColor: AppColor.white,
+                      intensity: 100,
+                      lightSource: LightSource.topLeft),
+                  onPressed: () {},
+                  child: Row(
+                    children: [
+                      const Icon(CupertinoIcons.list_bullet),
+                      const Gap(10),
+                      Text(
+                        'Hoạt động',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.darkLiver),
+                      )
+                    ],
+                  ),),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 23, top: 30, left: 23),
+                child: NeumorphicButton(
+                  style: NeumorphicStyle(
+                      color: AppColor.primaryColor,
+                      depth: 4,
+                      shadowLightColor: AppColor.white,
+                      intensity: 100,
+                      lightSource: LightSource.topLeft),
+                  onPressed: () async {
+                    await Get.find<SharedPreferences>().remove(StorageConstants.token);
+                    Get.offAllNamed(Routes.login);
+                  },
+                  child: Row(
+                    children: [
+                      const Icon(Icons.logout_outlined),
+                      const Gap(10),
+                      Text(
+                        'Đăng xuất',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.darkLiver),
+                      )
+                    ],
+                  ),),
+              ),
+
+            ],
+          ),
+        ),
+        onLoading: const Center(child: CircularProgressIndicator()),
+        onEmpty: const Text('No data found'),
+        onError: (error)=>Text(error.toString()),
+      )
+    ));
+  }
+}

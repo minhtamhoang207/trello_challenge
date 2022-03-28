@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
+import 'package:trello_challenge/modules/home/home_binding.dart';
+import 'package:trello_challenge/modules/home/home_screen.dart';
 import 'package:trello_challenge/modules/login/login_binding.dart';
 import 'package:trello_challenge/modules/login/login_screen.dart';
 import 'package:trello_challenge/modules/sign_up/sign_up_binding.dart';
 import 'package:trello_challenge/modules/sign_up/sign_up_screen.dart';
 import 'package:trello_challenge/modules/splash/splash_binding.dart';
 import 'package:trello_challenge/modules/splash/splash_screen.dart';
-import '../modules/home/home_binding.dart';
-import '../modules/home/home_screen.dart';
 part 'app_routes.dart';
 
 class AppPages {
@@ -18,7 +18,7 @@ class AppPages {
     ),
     GetPage(
         name: Routes.login,
-        page: () => LoginScreen(),
+        page: () => const LoginScreen(),
         binding: LoginBinding()
     ),
     GetPage(
@@ -28,6 +28,7 @@ class AppPages {
     ),
     GetPage(
         name: Routes.singUp,
+        transition: Transition.leftToRightWithFade,
         page: () => const SignUpScreen(),
         binding: SignUpBinding()
     ),

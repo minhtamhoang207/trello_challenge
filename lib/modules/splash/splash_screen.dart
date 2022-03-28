@@ -7,7 +7,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColor.primaryColor,
+      color: AppColor.darkLiver,
       child: Center(
         child: Text("Chillo",
           style: TextStyle(

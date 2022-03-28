@@ -4,6 +4,6 @@ import 'home_controller.dart';
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController(authRepository: Get.find()));
+    Get.lazyPut<HomeController>(() => HomeController(authRepository: Get.find(), userRepository: Get.find()));
   }
 }
