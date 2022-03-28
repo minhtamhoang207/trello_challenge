@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trello_challenge/modules/profile/components/profile_button.dart';
 import 'package:trello_challenge/modules/profile/profile_controller.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
 import 'package:trello_challenge/shared/constants/storage.dart';
+import 'package:trello_challenge/shared/utils/common_widget.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -68,7 +71,7 @@ class ProfileScreen extends GetView<ProfileController> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    '${controller.name.value}',
+                    controller.name.value,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 18,
@@ -97,7 +100,7 @@ class ProfileScreen extends GetView<ProfileController> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    '" Yêu màu hồng ghét sự giả dối, hoa rơi cửa phật 1 quật 500 "',
+                    '" Yêu màu hồng ghét sự giả dối"',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 13.5,
@@ -108,106 +111,41 @@ class ProfileScreen extends GetView<ProfileController> {
                 ),
               ),
               const Divider(thickness: 2),
-              Padding(
-                padding: const EdgeInsets.only(right: 23, top: 30, left: 23),
-                child: NeumorphicButton(
-                  style: NeumorphicStyle(
-                      color: AppColor.primaryColor,
-                      depth: 4,
-                      shadowLightColor: AppColor.white,
-                      intensity: 100,
-                      lightSource: LightSource.topLeft),
-                  onPressed: () {},
-                  child: Row(
-                    children: [
-                      const Icon(CupertinoIcons.at),
-                      const Gap(10),
-                      Text(
-                        'minhtamhoang207@gmail.com',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.darkLiver),
-                      )
-                    ],
-                  ),),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 23, top: 30, left: 23),
-                child: NeumorphicButton(
-                  style: NeumorphicStyle(
-                      color: AppColor.primaryColor,
-                      depth: 4,
-                      shadowLightColor: AppColor.white,
-                      intensity: 100,
-                      lightSource: LightSource.topLeft),
-                  onPressed: () {},
-                  child: Row(
-                    children: [
-                      const Icon(CupertinoIcons.square_list),
-                      const Gap(10),
-                      Text(
-                        'Công việc của tôi',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.darkLiver),
-                      )
-                    ],
-                  ),),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 23, top: 30, left: 23),
-                child: NeumorphicButton(
-                  style: NeumorphicStyle(
-                      color: AppColor.primaryColor,
-                      depth: 4,
-                      shadowLightColor: AppColor.white,
-                      intensity: 100,
-                      lightSource: LightSource.topLeft),
-                  onPressed: () {},
-                  child: Row(
-                    children: [
-                      const Icon(CupertinoIcons.list_bullet),
-                      const Gap(10),
-                      Text(
-                        'Hoạt động',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.darkLiver),
-                      )
-                    ],
-                  ),),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 23, top: 30, left: 23),
-                child: NeumorphicButton(
-                  style: NeumorphicStyle(
-                      color: AppColor.primaryColor,
-                      depth: 4,
-                      shadowLightColor: AppColor.white,
-                      intensity: 100,
-                      lightSource: LightSource.topLeft),
-                  onPressed: () async {
-                    await Get.find<SharedPreferences>().remove(StorageConstants.token);
-                    Get.offAllNamed(Routes.login);
-                  },
-                  child: Row(
-                    children: [
-                      const Icon(Icons.logout_outlined),
-                      const Gap(10),
-                      Text(
-                        'Đăng xuất',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.darkLiver),
-                      )
-                    ],
-                  ),),
-              ),
 
+              ProfileButton(
+                leadingIcon: const Icon(CupertinoIcons.at),
+                title: 'minhtamhoang207@gmail.com',
+                showRightArrow: true,
+                onPressed: (){
+                  Clipboard.setData(const ClipboardData(text: 'minhtamhoang207@gmail.com')).then((_){
+                    CommonWidget.toast('Đã copy email vào bộ nhớ tạm');
+                  });
+                },
+              ),
+              ProfileButton(
+                leadingIcon: const Icon(CupertinoIcons.square_list),
+                title: 'Công việc của tôi',
+                showRightArrow: true,
+                onPressed: (){},
+              ),
+              ProfileButton(
+                leadingIcon: const Icon(CupertinoIcons.list_bullet),
+                title: 'Hoạt động',
+                showRightArrow: true,
+                onPressed: (){},
+              ),
+              ProfileButton(
+                leadingIcon: const Icon(CupertinoIcons.lock_rotation),
+                title: 'Đổi mật khẩu',
+                showRightArrow: true,
+                onPressed: (){},
+              ),
+              ProfileButton(
+                leadingIcon: const Icon(Icons.logout_outlined),
+                title: 'Đăng xuất',
+                showRightArrow: false,
+                onPressed: () => controller.logout(),
+              ),
             ],
           ),
         ),

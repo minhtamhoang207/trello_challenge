@@ -39,7 +39,7 @@ class RestClient extends GetxService {
   }
 
   Future<Response> request(
-      String url, Method method, Map<String, dynamic>? params) async {
+      String url, Method method, dynamic params) async {
     late Response response;
 
     try {
@@ -55,13 +55,16 @@ class RestClient extends GetxService {
           queryParameters: params,
         );
       }
+      log('${response.runtimeType}');
       return response;
-    } on SocketException {
+    } on SocketException catch (e) {
+      log(e.toString());
       throw 'Vui lòng kiểm tra lại kết nối mạng';
     } on FormatException {
       throw 'Bad request';
     } on DioError catch (e){
       if(e.type == DioErrorType.other){
+        log(e.toString());
         throw 'Vui lòng kiểm tra lại kết nối mạng';
       } else{
         throw e.response?.data['message']??'Đã xảy ra lỗi vui lòng thử lại sau';
