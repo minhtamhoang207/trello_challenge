@@ -3,7 +3,6 @@ import 'package:trello_challenge/data/model/request/register_request.dart';
 import 'package:trello_challenge/data/model/request/verify_mail_request.dart';
 import 'package:trello_challenge/data/model/response/login_response.dart';
 import 'package:trello_challenge/data/model/response/register_response_model.dart';
-import 'package:trello_challenge/data/model/response/user_model.dart';
 import 'package:trello_challenge/data/model/response/verify_mail_response.dart';
 
 import '../base_provider.dart';

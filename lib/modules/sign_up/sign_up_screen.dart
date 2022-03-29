@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:trello_challenge/modules/sign_up/sign_up_controller.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
-import 'package:trello_challenge/shared/utils/common_widget.dart';
+import 'package:trello_challenge/shared/utils/focus.dart';
 import 'package:trello_challenge/shared/widgets/input_field.dart';
 
 class SignUpScreen extends GetView<SignUpController> {
@@ -128,8 +128,9 @@ class SignUpScreen extends GetView<SignUpController> {
             depth: 4,
             shadowLightColor: AppColor.darkGray.withOpacity(0.3),
           ),
-          onPressed: () async {
-            await controller.register();
+          onPressed: (){
+            AppFocus.unFocus(context);
+            controller.register();
           },
           child: Center(
             child: Text(

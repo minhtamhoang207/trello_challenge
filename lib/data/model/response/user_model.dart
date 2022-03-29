@@ -1,125 +1,74 @@
 import 'dart:convert';
 
-UserResponse userResponseFromJson(String str) => UserResponse.fromJson(json.decode(str));
+UserResponseModel userFromJson(String str) => UserResponseModel.fromJson(json.decode(str));
 
-String userResponseToJson(UserResponse data) => json.encode(data.toJson());
-
-class UserResponse {
-  UserResponse({
-    required this.id,
-    required this.name,
-    required this.username,
-    required this.email,
-    required this.address,
-    required this.phone,
-    required this.website,
-    required this.company,
+class UserResponseModel {
+  UserResponseModel({
+    this.message,
+    this.data,
+    this.meta,
+    this.time,
   });
 
-  final int id;
-  final String name;
-  final String username;
-  final String email;
-  final Address address;
-  final String phone;
-  final String website;
-  final Company company;
+  String? message;
+  Data? data;
+  Meta? meta;
+  DateTime? time;
 
-  factory UserResponse.fromJson(Map<String, dynamic> json) => UserResponse(
-    id: json["id"],
-    name: json["name"],
-    username: json["username"],
-    email: json["email"],
-    address: Address.fromJson(json["address"]),
-    phone: json["phone"],
-    website: json["website"],
-    company: Company.fromJson(json["company"]),
+  factory UserResponseModel.fromJson(Map<String, dynamic> json) => UserResponseModel(
+    message: json["message"],
+    data: Data.fromJson(json["data"]),
+    meta: Meta.fromJson(json["meta"]),
+    time: DateTime.parse(json["time"]),
+  );
+}
+
+class Data {
+  Data({
+    this.id,
+    this.username,
+    this.email,
+    this.active,
+    this.bio,
+    this.nickname,
+    this.avatar,
+  });
+
+  String? id;
+  String? username;
+  String? email;
+  bool? active;
+  String? bio;
+  String? nickname;
+  String? avatar;
+
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    id: json["_id"]??0,
+    username: json["username"]??'',
+    email: json["email"]??'',
+    active: json["active"]??false,
+    bio: json["bio"]??'',
+    nickname: json["nickname"]??'',
+    avatar: json["avatar"]??'',
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
+    "_id": id,
     "username": username,
     "email": email,
-    "address": address.toJson(),
-    "phone": phone,
-    "website": website,
-    "company": company.toJson(),
+    "active": active,
+    "bio": bio,
+    "nickname": nickname,
+    "avatar": avatar,
   };
 }
 
-class Address {
-  Address({
-    required this.street,
-    required this.suite,
-    required this.city,
-    required this.zipcode,
-    required this.geo,
-  });
+class Meta {
+  Meta();
 
-  final String street;
-  final String suite;
-  final String city;
-  final String zipcode;
-  final Geo geo;
-
-  factory Address.fromJson(Map<String, dynamic> json) => Address(
-    street: json["street"],
-    suite: json["suite"],
-    city: json["city"],
-    zipcode: json["zipcode"],
-    geo: Geo.fromJson(json["geo"]),
+  factory Meta.fromJson(Map<String, dynamic> json) => Meta(
   );
 
   Map<String, dynamic> toJson() => {
-    "street": street,
-    "suite": suite,
-    "city": city,
-    "zipcode": zipcode,
-    "geo": geo.toJson(),
-  };
-}
-
-class Geo {
-  Geo({
-    required this.lat,
-    required this.lng,
-  });
-
-  final String lat;
-  final String lng;
-
-  factory Geo.fromJson(Map<String, dynamic> json) => Geo(
-    lat: json["lat"],
-    lng: json["lng"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "lat": lat,
-    "lng": lng,
-  };
-}
-
-class Company {
-  Company({
-    required this.name,
-    required this.catchPhrase,
-    required this.bs,
-  });
-
-  final String name;
-  final String catchPhrase;
-  final String bs;
-
-  factory Company.fromJson(Map<String, dynamic> json) => Company(
-    name: json["name"],
-    catchPhrase: json["catchPhrase"],
-    bs: json["bs"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "catchPhrase": catchPhrase,
-    "bs": bs,
   };
 }

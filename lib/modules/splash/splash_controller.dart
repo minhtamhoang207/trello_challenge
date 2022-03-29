@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
@@ -10,7 +12,7 @@ class SplashController extends GetxController {
     await Future.delayed(const Duration(seconds: 2));
     final storage = Get.find<SharedPreferences>();
     try {
-      print(storage.getString(StorageConstants.token));
+      log(storage.getString(StorageConstants.token).toString());
       if (storage.getString(StorageConstants.token) != null) {
         Get.toNamed(Routes.home);
       } else {

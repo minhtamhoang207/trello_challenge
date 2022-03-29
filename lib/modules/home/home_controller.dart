@@ -14,7 +14,7 @@ class HomeController extends GetxController {
   final PersistentTabController tabController = PersistentTabController(initialIndex: 0);
 
 
-  var user = Rxn<UserResponse>();
+ // var user = Rxn<UserResponse>();
   var status = RxStatus.empty();
 
   @override

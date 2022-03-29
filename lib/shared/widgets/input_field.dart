@@ -11,6 +11,10 @@ class InputField extends StatelessWidget {
   final Widget? prefix;
   final Widget? suffix;
   final String? Function(String?)? validator;
+  final Function()? onTapSuffix;
+  final int? maxLine;
+  final int? maxLength;
+  final EdgeInsets? contentPadding;
 
   const InputField({
     Key? key,
@@ -23,19 +27,27 @@ class InputField extends StatelessWidget {
     this.validator,
     this.prefix,
     this.suffix,
+    this.onTapSuffix,
+    this.maxLine = 1,
+    this.contentPadding = EdgeInsets.zero,
+    this.maxLength,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLength: maxLength,
       scrollPadding: const EdgeInsets.only(bottom: 50, right: 20),
       textAlignVertical: TextAlignVertical.center,
+      maxLines: maxLine,
       decoration: InputDecoration(
+        counterText: '',
         fillColor: Colors.transparent,
         prefixIcon: prefix,
         suffixIcon: suffix,
         border: InputBorder.none,
         floatingLabelBehavior: FloatingLabelBehavior.always,
+        contentPadding: contentPadding,
         hintText: placeholder,
         hintStyle: TextStyle(
           fontSize: fontSize,
