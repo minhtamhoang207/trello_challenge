@@ -63,7 +63,11 @@ class SignUpController extends GetxController{
             password: passwordController.text
         ));
         CommonWidget.hideLoading();
-        Get.dialog(const CustomDialog(dialogType: DialogType.success, message: 'Đăng ký thành công'));
+        Get.dialog(
+            const CustomDialog(
+                dialogType: DialogType.success,
+                message: 'Đăng ký thành công\nVui lòng kiểm tra email để kích hoạt tài khoản'))
+            .then((value) => Get.back());
       } catch(e){
         log(e.toString());
         CommonWidget.hideLoading();

@@ -49,4 +49,11 @@ class UpdateProfileController extends GetxController {
       }
     }
   }
+
+  @override
+  void dispose() {
+    nicknameController.dispose();
+    bioController.dispose();
+    super.dispose();
+  }
 }
