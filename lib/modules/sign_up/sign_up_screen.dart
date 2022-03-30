@@ -23,6 +23,7 @@ class SignUpScreen extends GetView<SignUpController> {
 
   Widget _buildWidget(BuildContext context) {
     return ListView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 10, top: 20),

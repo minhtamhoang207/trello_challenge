@@ -8,4 +8,5 @@ abstract class Routes {
   static const profile = '/profile';
   static const CHANGE_PASSWORD = '/change-password';
   static const UPDATE_PROFILE = '/update-profile';
+  static const PHOTO_VIEW = '/photo-view';
 }

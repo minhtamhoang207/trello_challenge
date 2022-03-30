@@ -24,6 +24,7 @@ class ProfileController extends GetxController
     CommonWidget.showLoading();
     try {
       final user = await userRepository.getCurrentUser();
+      await Future.delayed(const Duration(milliseconds: 300));
       change(user, status: RxStatus.success());
       CommonWidget.hideLoading();
     } catch (e) {

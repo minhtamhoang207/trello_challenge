@@ -6,6 +6,8 @@ import '../modules/home/home_binding.dart';
 import '../modules/home/home_screen.dart';
 import '../modules/login/login_binding.dart';
 import '../modules/login/login_screen.dart';
+import '../modules/photo_view/bindings/photo_view_binding.dart';
+import '../modules/photo_view/views/photo_view_view.dart';
 import '../modules/sign_up/sign_up_binding.dart';
 import '../modules/sign_up/sign_up_screen.dart';
 import '../modules/splash/splash_binding.dart';
@@ -43,6 +45,12 @@ class AppPages {
       name: Routes.UPDATE_PROFILE,
       page: () => UpdateProfileView(),
       binding: UpdateProfileBinding(),
+    ),
+    GetPage(
+      name: Routes.PHOTO_VIEW,
+      page: () => PhotoViewView(),
+      binding: PhotoViewBinding(),
+      transition: Transition.native,
     ),
   ];
 }

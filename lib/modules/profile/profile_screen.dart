@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:trello_challenge/data/model/params/update_profile_params.dart';
+import 'package:trello_challenge/gen/assets.gen.dart';
 import 'package:trello_challenge/modules/profile/components/profile_button.dart';
 import 'package:trello_challenge/modules/profile/profile_controller.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
@@ -25,6 +27,7 @@ class ProfileScreen extends GetView<ProfileController> {
                   controller.loadUser();
                 },
                 child: ListView(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   children: [
                     Padding(
                       padding:
@@ -49,36 +52,60 @@ class ProfileScreen extends GetView<ProfileController> {
                       ),
                     ),
                     Center(
-                      child: NeumorphicButton(
-                          style: NeumorphicStyle(
-                              color: AppColor.primaryColor,
-                              boxShape: const NeumorphicBoxShape.circle(),
-                              depth: 4,
-                              shadowLightColor: AppColor.white,
-                              intensity: 100,
-                              lightSource: LightSource.topLeft),
-                          onPressed: () {
-                            controller.updateAvatar();
-                          },
-                          child: CachedNetworkImage(
-                            imageUrl: state?.data?.avatar ?? '',
-                            errorWidget: (context, url, error) => Icon(
-                                CupertinoIcons.person,
-                                size: 100,
-                                color: AppColor.darkGray),
-                            placeholder: (context, url) => Icon(
-                                CupertinoIcons.person,
-                                size: 100,
-                                color: AppColor.darkGray),
-                            imageBuilder: (context, imageProvider) => SizedBox(
-                              height: 100,
-                              width: 100,
-                              child: CircleAvatar(
-                                radius: 50,
-                                backgroundImage: imageProvider,
+                      child: Stack(
+                        children: [
+                          NeumorphicButton(
+                              style: NeumorphicStyle(
+                                  color: AppColor.primaryColor,
+                                  boxShape: const NeumorphicBoxShape.circle(),
+                                  depth: 4,
+                                  shadowLightColor: AppColor.white,
+                                  intensity: 100,
+                                  lightSource: LightSource.topLeft),
+                              onPressed: () {
+                                // controller.updateAvatar();
+                                Get.toNamed(Routes.PHOTO_VIEW, arguments: state?.data?.avatar??'');
+                              },
+                              child: Hero(
+                                tag: state?.data?.avatar??'',
+                                child: CachedNetworkImage(
+                                  imageUrl: state?.data?.avatar ?? '',
+                                  errorWidget: (context, url, error) => Icon(
+                                      CupertinoIcons.person,
+                                      size: 100,
+                                      color: AppColor.darkGray),
+                                  placeholder: (context, url) => Icon(
+                                      CupertinoIcons.person,
+                                      size: 100,
+                                      color: AppColor.darkGray),
+                                  imageBuilder: (context, imageProvider) => SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: imageProvider,
+                                    ),
+                                  ),
+                                ),
+                              )
+                          ),
+                          Positioned(
+                            bottom: 0,
+                              right: 0,
+                              child: NeumorphicButton(
+                                style: NeumorphicStyle(
+                                    color: AppColor.primaryColor,
+                                    boxShape: const NeumorphicBoxShape.circle(),
+                                    intensity: 10,
+                                    disableDepth: true,
+                                    border: const NeumorphicBorder()
+                                ),
+                                onPressed: ()=> controller.updateAvatar(),
+                                child: Icon(CupertinoIcons.camera_rotate_fill, size: 18, color: AppColor.darkLiver),
                               ),
-                            ),
-                          )),
+                          )
+                        ],
+                      )
                     ),
                     Padding(
                       padding:
@@ -180,9 +207,18 @@ class ProfileScreen extends GetView<ProfileController> {
                 },
                 child: ListView(
                   children: [
-                    // TODO: add error icon :D
-                    const Gap(100),
-                    Center(child: Text(error.toString()))
+                    Gap(Get.height * 0.2),
+                    Lottie.asset(Assets.lotties.lottieError, width: 100, height: 100),
+                    const Gap(50),
+                    Center(
+                        child: Text(error.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColor.darkLiver,
+                            fontSize: 16
+                          ),
+                        )
+                    )
                   ],
                 ),
               ),

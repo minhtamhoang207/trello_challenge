@@ -37,8 +37,7 @@ class SignUpController extends GetxController{
     }
     else if(!Regex.isEmail(emailController.text)){
       CommonWidget.toast('Email không hợp lệ');
-    }
-    else if(userNameController.text.trim().isEmpty){
+    } else if(userNameController.text.trim().isEmpty){
       CommonWidget.toast('Tên đăng nhập không được để trống');
     } else if(passwordController.text.trim().isEmpty){
       CommonWidget.toast('Mật khẩu không được để trống');

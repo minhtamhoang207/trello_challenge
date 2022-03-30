@@ -31,6 +31,8 @@ dependencies:
   flutter_keyboard_visibility: 5.2.0
   cached_network_image: 3.2.0
   image_picker: 0.8.4+11
+  photo_view: 0.13.0
+  extended_image: 6.0.2+1
 
 dev_dependencies: 
   flutter_lints: ^1.0.0

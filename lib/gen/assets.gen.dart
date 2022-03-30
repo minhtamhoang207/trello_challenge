@@ -21,6 +21,9 @@ class $AssetsLottiesGen {
   /// File path: assets/lotties/img_login.json
   String get imgLogin => 'assets/lotties/img_login.json';
 
+  /// File path: assets/lotties/lottie_error.json
+  String get lottieError => 'assets/lotties/lottie_error.json';
+
   /// File path: assets/lotties/lottie_loading.json
   String get lottieLoading => 'assets/lotties/lottie_loading.json';
 }

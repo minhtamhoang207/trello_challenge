@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:trello_challenge/shared/constants/colors.dart';
-import 'package:trello_challenge/shared/utils/focus.dart';
-import 'package:trello_challenge/shared/widgets/input_field.dart';
+import '../../../shared/constants/colors.dart';
+import '../../../shared/utils/focus.dart';
+import '../../../shared/widgets/input_field.dart';
 import '../controllers/update_profile_controller.dart';
 
 class UpdateProfileView extends GetView<UpdateProfileController> {

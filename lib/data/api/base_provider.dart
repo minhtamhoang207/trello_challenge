@@ -23,7 +23,8 @@ class RestClient extends GetxService {
   }
 
   void initInterceptors() {
-    _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+    _dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) {
       final token =
           Get.find<SharedPreferences>().getString(StorageConstants.token);
       if (token != null) {
@@ -35,11 +36,15 @@ class RestClient extends GetxService {
           '\n*** Request data: ${options.data},'
           '\n*** HEADERS: ${options.headers}\n');
       return handler.next(options);
-    }, onResponse: (response, handler) {
+    },
+
+    onResponse: (response, handler) {
       log('RESPONSE[${response.statusCode}] \n*** DATA: ${response.data}\n');
       return handler.next(response);
-    }, onError: (err, handler) {
-      log('ERROR[${err.response?.statusCode}]\n');
+    },
+
+    onError: (err, handler) {
+      log('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}\n');
       return handler.next(err);
     }));
   }
