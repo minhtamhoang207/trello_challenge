@@ -25,7 +25,7 @@ dependencies:
   google_fonts: 2.3.1
   flutter_svg: 1.0.3
   bot_toast: 4.0.1
-  boardview: 0.2.2
+#  boardview: 0.2.2
   lottie: 1.2.2
   persistent_bottom_nav_bar_v2: 4.1.8
   flutter_keyboard_visibility: 5.2.0

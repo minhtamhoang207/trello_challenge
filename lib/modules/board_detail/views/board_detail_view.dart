@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:boardview/board_item.dart';
-import 'package:boardview/board_list.dart';
-import 'package:boardview/boardview.dart';
-import 'package:boardview/boardview_controller.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
 
+import '../../boardview/lib/board_item.dart';
+import '../../boardview/lib/board_list.dart';
+import '../../boardview/lib/boardview.dart';
+import '../../boardview/lib/boardview_controller.dart';
 import '../controllers/board_detail_controller.dart';
 
 class BoardDetailView extends GetView<BoardDetailController> {

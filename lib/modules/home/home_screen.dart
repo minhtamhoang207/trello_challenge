@@ -7,11 +7,7 @@ import 'package:trello_challenge/modules/profile/profile_screen.dart';
 import 'package:trello_challenge/modules/workspace/views/workspace_view.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
 import 'home_controller.dart';
-import 'package:boardview/board_item.dart';
-import 'package:boardview/board_list.dart';
-import 'package:boardview/boardview_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:boardview/boardview.dart';
 
 class HomePage extends GetView<HomeController>{
   const HomePage({Key? key}) : super(key: key);
