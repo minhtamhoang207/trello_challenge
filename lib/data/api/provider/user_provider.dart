@@ -11,19 +11,19 @@ class UserProvider{
   UserProvider({required this.restClient});
 
   Future<Response> updateAvatar({required String path, required FormData formData}) async {
-    return restClient.request(path, Method.PUT, formData);
+    return restClient.request(url: path, method: Method.PUT, params: formData);
   }
 
   Future<Response> changePassword({required String path, required ChangePasswordRequest data}) async {
-    return restClient.request(path, Method.PUT, data.toJson());
+    return restClient.request(url: path, method: Method.PUT, params: data.toJson());
   }
 
   Future<Response> getCurrentUser({required String path}) async {
-    return restClient.request(path, Method.GET, null);
+    return restClient.request(url: path, method: Method.GET, params: null);
   }
 
   Future<Response> updateProfile({required String path, required UpdateProfileRequest data}) async {
-    return restClient.request(path, Method.PUT, data);
+    return restClient.request(url: path, method: Method.PUT, params: data);
   }
 
 }

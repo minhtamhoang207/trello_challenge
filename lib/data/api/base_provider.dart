@@ -34,6 +34,7 @@ class RestClient extends GetxService {
           '\n*** PATH: ${options.uri} '
           '\n*** Request Values: ${options.queryParameters},'
           '\n*** Request data: ${options.data},'
+          '\n*** Request params: ${options.queryParameters},'
           '\n*** HEADERS: ${options.headers}\n');
       return handler.next(options);
     },
@@ -49,7 +50,10 @@ class RestClient extends GetxService {
     }));
   }
 
-  Future<Response> request(String url, Method method, dynamic params) async {
+  Future<Response> request({
+    required String url,
+    required Method method,
+    dynamic params}) async {
     late Response response;
 
     try {

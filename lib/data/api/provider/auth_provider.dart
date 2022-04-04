@@ -11,14 +11,14 @@ class AuthProvider{
 
 
   Future<Response> register({required String path, required RegisterRequest data}) {
-    return restClient.request(path, Method.POST, data.toJson());
+    return restClient.request(url: path, method: Method.POST, params: data.toJson());
   }
 
   Future<Response> verifyMail({required String path, required VerifyMailRequest data}) {
-    return restClient.request(path, Method.POST, data.toJson());
+    return restClient.request(url: path, method: Method.POST, params: data.toJson());
   }
 
   Future<Response> login({required String path, required LoginRequest data}) {
-    return restClient.request(path, Method.POST, data.toJson());
+    return restClient.request(url: path, method: Method.POST, params: data.toJson());
   }
 }

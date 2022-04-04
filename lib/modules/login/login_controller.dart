@@ -64,7 +64,7 @@ class LoginController extends GetxController {
         _sharedPreferences.setString(
             StorageConstants.token, response.data.accessToken);
         CommonWidget.hideLoading();
-        Get.toNamed(Routes.home);
+        Get.offAllNamed(Routes.home);
       } catch (e) {
         log(e.toString());
         CommonWidget.hideLoading();
