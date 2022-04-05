@@ -18,7 +18,7 @@ class UserRepository extends RestClient {
   }
 
   Future<void> changePassword({required ChangePasswordRequest data}) async {
-    await userProvider.changePassword(path: 'user/reset-password', data: data);
+    await userProvider.changePassword(path: 'users/reset-password', data: data);
   }
 
   Future<UserResponseModel> getCurrentUser() async {

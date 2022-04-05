@@ -1,5 +1,4 @@
 import 'package:flutter/animation.dart';
-
 import 'boardview.dart';
 
 class BoardViewController{

@@ -1,4 +1,4 @@
-package com.tom.challenge.trello_challenge
+package com.tom.Chillo
 
 import io.flutter.embedding.android.FlutterActivity
 

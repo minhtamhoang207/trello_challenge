@@ -16,7 +16,7 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            backgroundColor: AppColor.primaryColor,
+            backgroundColor: Colors.white,
             body: controller.obx(
                   (state) => RefreshIndicator(
                   onRefresh: () async {
@@ -104,6 +104,8 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
                   ],
                 ),
               ),
-            )));
+            )
+        )
+    );
   }
 }
