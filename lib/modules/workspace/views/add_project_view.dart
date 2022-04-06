@@ -157,8 +157,7 @@ class AddProjectView extends GetView<WorkspaceController> {
                                   ),
                                   onChanged: (value){
                                     if(controller.private.value == false){
-                                      controller.private.value = !controller.private.value;
-                                      controller.public.value = false;
+                                      controller.private.value = true;
                                     }
                                   },
                               ),
@@ -202,13 +201,12 @@ class AddProjectView extends GetView<WorkspaceController> {
                           child: Transform.scale(
                             scale: 0.5,
                             child: NeumorphicCheckbox(
-                                value: controller.public.value,
+                                value: !controller.private.value,
                                 style: NeumorphicCheckboxStyle(
                                     boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10))
                                 ),
                                 onChanged: (value){
-                                  if(controller.public.value == false){
-                                    controller.public.value = !controller.public.value;
+                                  if(controller.private.value == true){
                                     controller.private.value = false;
                                   }
                                 },
@@ -232,11 +230,11 @@ class AddProjectView extends GetView<WorkspaceController> {
                     lightSource: LightSource.topLeft),
                 onPressed: () async {
                   AppFocus.unFocus(context);
-                  controller.createProject();
+                  controller.edit.value?controller.editProject():controller.createProject();
                 },
                 child: Center(
                   child: Text(
-                    'Tạo dự án',
+                    controller.edit.value?'Chỉnh sửa thông tin':'Tạo dự án',
                     style: TextStyle(
                         color: AppColor.darkGray,
                         fontWeight: FontWeight.w600,

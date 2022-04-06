@@ -17,13 +17,29 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
     return SafeArea(
         child: Scaffold(
             backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: AppColor.appBlue,
+              title: Text(controller.argument.projectName),
+              automaticallyImplyLeading: true,
+              actions: [
+                IconButton(
+                  onPressed:(){
+                    //Get.toNamed(Routes.ADD_PROJECT);
+                  },
+                  icon: const Icon(Icons.add_outlined),
+                  tooltip: 'Thêm bảng mới',
+                ),
+              ],
+            ),
             body: controller.obx(
                   (state) => RefreshIndicator(
                   onRefresh: () async {
                     controller.getBoards();
                   },
-                  child: GridView.builder(
-                    itemCount: state!.data.length,
+                  child: state!.data.isEmpty?
+                      Center(child: Lottie.network('https://assets8.lottiefiles.com/packages/lf20_epqmtf3b.json')):
+                  GridView.builder(
+                    itemCount: state.data.length,
                     padding: const EdgeInsets.all(20),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         childAspectRatio: 6/4.5,
@@ -54,11 +70,11 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.5),
-                                  borderRadius: const BorderRadius.only(
-                                    bottomRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10)
-                                  )
+                                    color: Colors.black.withOpacity(0.5),
+                                    borderRadius: const BorderRadius.only(
+                                        bottomRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10)
+                                    )
                                 ),
                                 child: Row(
                                   children: [
@@ -67,7 +83,7 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
                                           '${state.data[index].name}',
                                           maxLines: 1, overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            color: AppColor.white
+                                              color: AppColor.white
                                           ),
                                         )
                                     )

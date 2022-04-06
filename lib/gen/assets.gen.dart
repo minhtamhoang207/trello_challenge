@@ -31,6 +31,9 @@ class $AssetsLottiesGen {
 class $AssetsSvgsGen {
   const $AssetsSvgsGen();
 
+  /// File path: assets/svgs/ic_dot_menu.svg
+  String get icDotMenu => 'assets/svgs/ic_dot_menu.svg';
+
   /// File path: assets/svgs/ic_lock.svg
   String get icLock => 'assets/svgs/ic_lock.svg';
 

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-ProjectResponse projectResponseFromJson(String str) => ProjectResponse.fromJson(json.decode(str));
+import 'package:trello_challenge/data/model/response/user_model.dart';
 
-String projectResponseToJson(ProjectResponse data) => json.encode(data.toJson());
+ProjectResponse projectResponseFromJson(String str) => ProjectResponse.fromJson(json.decode(str));
 
 class ProjectResponse {
   ProjectResponse({
@@ -23,13 +23,6 @@ class ProjectResponse {
     meta: Meta.fromJson(json["meta"]),
     time: DateTime.parse(json["time"]),
   );
-
-  Map<String, dynamic> toJson() => {
-    "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    "meta": meta?.toJson(),
-    "time": time?.toIso8601String(),
-  };
 }
 
 class ProjectModel {
@@ -45,47 +38,63 @@ class ProjectModel {
   String? name;
   String? description;
   bool isPrivate;
-  List<Member> members;
+  List<ProjectMember> members;
 
   factory ProjectModel.fromJson(Map<String, dynamic> json) => ProjectModel(
     id: json["_id"],
     name: json["name"]??'',
     description: json["description"]??'',
     isPrivate: json["is_private"],
-    members: json["members"] != null? List<Member>.from(json["members"].map((x) => Member.fromJson(x))):[],
+    members: json["members"] != null? List<ProjectMember>.from(json["members"].map((x) => ProjectMember.fromJson(x))):[],
   );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "description": description,
-    "is_private": isPrivate,
-    "members": List<dynamic>.from(members.map((x) => x.toJson())),
-  };
 }
 
-class Member {
-  Member({
-    this.user,
+class ProjectMember {
+  ProjectMember({
+    required this.user,
     this.role,
     this.updateDate,
   });
 
-  String? user;
+  User user;
   String? role;
   DateTime? updateDate;
 
-  factory Member.fromJson(Map<String, dynamic> json) => Member(
-    user: json["user"]??'',
-    role: json["role"]??'',
+  factory ProjectMember.fromJson(Map<String, dynamic> json) => ProjectMember(
+    user: User.fromJson(json["user"]),
+    role: json["role"],
     updateDate: DateTime.parse(json["updateDate"]),
   );
+}
 
-  Map<String, dynamic> toJson() => {
-    "user": user,
-    "role": role,
-    "updateDate": updateDate?.toIso8601String(),
-  };
+class User {
+  User({
+    required this.id,
+    this.username,
+    this.email,
+    this.active,
+    this.bio,
+    this.nickname,
+    this.avatar,
+  });
+
+  String id;
+  String? username;
+  String? email;
+  bool? active;
+  String? bio;
+  String? nickname;
+  String? avatar;
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    id: json["_id"],
+    username: json["username"]??'',
+    email: json["email"]??'',
+    active: json["active"]??false,
+    bio: json["bio"]??'',
+    nickname: json["nickname"]??'',
+    avatar: json["avatar"]??'',
+  );
 }
 
 class Meta {

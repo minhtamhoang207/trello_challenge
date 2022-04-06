@@ -11,20 +11,20 @@ class UserResponseModel {
   });
 
   String? message;
-  Data? data;
+  UserModel? data;
   Meta? meta;
   DateTime? time;
 
   factory UserResponseModel.fromJson(Map<String, dynamic> json) => UserResponseModel(
     message: json["message"],
-    data: Data.fromJson(json["data"]),
+    data: UserModel.fromJson(json["data"]),
     meta: Meta.fromJson(json["meta"]),
     time: DateTime.parse(json["time"]),
   );
 }
 
-class Data {
-  Data({
+class UserModel {
+  UserModel({
     this.id,
     this.username,
     this.email,
@@ -42,7 +42,7 @@ class Data {
   String? nickname;
   String? avatar;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     id: json["_id"]??0,
     username: json["username"]??'',
     email: json["email"]??'',

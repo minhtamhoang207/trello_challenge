@@ -15,7 +15,8 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   RxBool private = RxBool(true);
-  RxBool public = RxBool(false);
+  RxBool edit = RxBool(false);
+  RxString projectId = RxString('');
 
   @override
   void onInit() {
@@ -42,6 +43,16 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
     }
   }
 
+  void deleteProject(String projectID) async {
+    CommonWidget.showLoading();
+    try {
+      await projectRepository.deleteProject(projectID: projectID);
+      CommonWidget.hideLoading();
+    } catch (e) {
+      CommonWidget.hideLoading();
+    }
+  }
+
   void createProject() async {
     if(nameController.text.isNotEmpty && nameController.text.length >= 3){
       CommonWidget.showLoading();
@@ -52,7 +63,6 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
             private: private.value
         ));
         CommonWidget.hideLoading();
-        resetState();
         Get.back();
         getProjects();
       } catch (e) {
@@ -64,11 +74,39 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
     }
   }
 
-  void resetState(){
-    nameController.text = '';
-    descriptionController.text = '';
-    private.value = true;
-    public.value = false;
+  void editProject() async {
+    if(nameController.text.isNotEmpty && nameController.text.length >= 3){
+      CommonWidget.showLoading();
+      try {
+        await projectRepository.editProject(projectID: projectId.value, data: CreateProjectRequest(
+            name: nameController.text,
+            description: descriptionController.text,
+            private: private.value
+        ));
+        CommonWidget.hideLoading();
+        Get.back();
+        getProjects();
+      } catch (e) {
+        CommonWidget.hideLoading();
+        Get.dialog( CustomDialog(dialogType: DialogType.failed, message: e.toString()));
+      }
+    } else{
+      CommonWidget.toast('Tên dự án chứa ít nhất 3 kí tự và không được để trống');
+    }
+  }
+
+  void initCreateProject({
+    required String name,
+    required String description,
+    bool isPrivate = false,
+    bool isEdit = false,
+    String projectID = '',
+  }){
+    edit.value = isEdit;
+    projectId.value = projectID;
+    nameController.text = name;
+    descriptionController.text = description;
+    private.value = isPrivate;
   }
 }
 

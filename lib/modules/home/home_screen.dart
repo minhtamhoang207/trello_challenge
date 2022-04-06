@@ -20,14 +20,25 @@ class HomePage extends GetView<HomeController>{
       screens: _buildScreens(),
       items: _navBarsItems(),
       confineInSafeArea: true,
-      backgroundColor: AppColor.primaryColor,
+      backgroundColor: AppColor.white,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
       stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        colorBehindNavBar: Colors.white,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10)
+        ),
+        colorBehindNavBar: Colors.transparent,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 6,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
       onItemSelected: (index){
         if(index == 3){
@@ -45,7 +56,7 @@ class HomePage extends GetView<HomeController>{
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
-      navBarStyle: NavBarStyle.neumorphic, // Choose the nav bar style with this property.
+      navBarStyle: NavBarStyle.style6
     );
   }
 
@@ -62,23 +73,23 @@ class HomePage extends GetView<HomeController>{
     return [
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.home),
-        activeColorPrimary: AppColor.darkLiver,
-        inactiveColorPrimary: AppColor.darkLiver.withOpacity(0.3),
+        activeColorPrimary: AppColor.appBlue,
+        inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.today),
-        activeColorPrimary: AppColor.darkLiver,
-        inactiveColorPrimary: AppColor.darkLiver.withOpacity(0.3),
+        activeColorPrimary: AppColor.appBlue,
+        inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.bell),
-        activeColorPrimary: AppColor.darkLiver,
-        inactiveColorPrimary: AppColor.darkLiver.withOpacity(0.3),
+        activeColorPrimary: AppColor.appBlue,
+        inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.profile_circled),
-        activeColorPrimary: AppColor.darkLiver,
-        inactiveColorPrimary: AppColor.darkLiver.withOpacity(0.3),
+        activeColorPrimary: AppColor.appBlue,
+        inactiveColorPrimary: Colors.grey,
       ),
     ];
   }

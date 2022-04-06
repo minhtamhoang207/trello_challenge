@@ -15,10 +15,18 @@ class ProjectProvider{
     return restClient.request(url: path, method: Method.POST, params: data.toJson());
   }
 
+  Future<Response> editProject({required String path, required CreateProjectRequest data}) {
+    return restClient.request(url: path, method: Method.PUT, params: data.toJson());
+  }
+
   Future<Response> getBoards({required String path, required String projectID}) {
     return restClient.request(url: path, method: Method.GET, params: {
       'project': projectID
     });
+  }
+
+  Future<Response> deleteProject({required String path}) {
+    return restClient.request(url: path, method: Method.DELETE);
   }
 
 }

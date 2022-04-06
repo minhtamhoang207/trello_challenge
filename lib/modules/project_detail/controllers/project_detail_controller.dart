@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:trello_challenge/data/model/params/project_detail_params.dart';
 import 'package:trello_challenge/data/model/response/board_response.dart';
 
 import '../../../data/api/repository/project_repository.dart';
@@ -9,10 +10,10 @@ class ProjectDetailController extends GetxController with StateMixin<BoardRespon
   final ProjectRepository projectRepository;
   ProjectDetailController({required this.projectRepository});
 
-  late final String projectID;
+  late ProjectDetailParams argument;
   @override
   void onInit() {
-    projectID = Get.arguments;
+    argument = Get.arguments;
     getBoards();
     super.onInit();
   }
@@ -21,7 +22,7 @@ class ProjectDetailController extends GetxController with StateMixin<BoardRespon
   void getBoards() async {
     CommonWidget.showLoading();
     try {
-      final response = await projectRepository.getBoards(projectID: projectID);
+      final response = await projectRepository.getBoards(projectID: argument.projectId);
       change(response, status: RxStatus.success());
       CommonWidget.hideLoading();
     } catch (e) {

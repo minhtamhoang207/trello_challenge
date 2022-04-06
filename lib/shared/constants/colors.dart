@@ -12,8 +12,9 @@ class AppColor {
   static Color white = const Color(0xFFFFFFFF);
   static Color red = Colors.red;
 
-  static Color darkLiver = const Color(0xFF50514F);
+  static Color darkLiver = const Color(0xFF080708);
   static Color primaryColor = const Color(0xFFECF0F3);
+  static Color appBlue = const Color(0xFF0E6BA8);
 }
 
 Color hexToColor(String hex) {
