@@ -13,4 +13,5 @@ abstract class Routes {
   static const ADD_PROJECT = '/add-project';
   static const PROJECT_DETAIL = '/project-detail';
   static const BOARD_DETAIL = '/board-detail';
+  static const CREATE_BOARD = '/create-board';
 }

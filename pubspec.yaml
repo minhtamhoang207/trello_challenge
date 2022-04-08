@@ -18,6 +18,9 @@ dependencies:
   # local storage
   shared_preferences: 2.0.13
 
+  #localization facilities
+  intl: 0.17.0
+
   # UI
   cupertino_icons: 1.0.2
   flutter_neumorphic: 3.2.0

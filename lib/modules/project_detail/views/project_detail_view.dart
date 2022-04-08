@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
+import 'package:trello_challenge/shared/widgets/empty_list.dart';
 
 import '../../../gen/assets.gen.dart';
 import '../../../shared/constants/colors.dart';
@@ -24,7 +25,7 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
               actions: [
                 IconButton(
                   onPressed:(){
-                    //Get.toNamed(Routes.ADD_PROJECT);
+                    Get.toNamed(Routes.CREATE_BOARD);
                   },
                   icon: const Icon(Icons.add_outlined),
                   tooltip: 'Thêm bảng mới',
@@ -37,7 +38,7 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
                     controller.getBoards();
                   },
                   child: state!.data.isEmpty?
-                      Center(child: Lottie.network('https://assets8.lottiefiles.com/packages/lf20_epqmtf3b.json')):
+                      const EmptyList(message: 'Chưa có bảng nào được tạo'):
                   GridView.builder(
                     itemCount: state.data.length,
                     padding: const EdgeInsets.all(20),
@@ -50,12 +51,20 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
                     itemBuilder: (BuildContext context, int index){
                       return GestureDetector(
                         onTap: (){
-                          Get.toNamed(Routes.BOARD_DETAIL, arguments: state.data[index].background);
+                          Get.toNamed(Routes.BOARD_DETAIL, arguments: {
+                            'background': state.data[index].background,
+                            'boardID': state.data[index].id
+                          });
                         },
                         child: Stack(
                           children: [
                             Container(
-                              decoration: BoxDecoration(
+                              decoration: state.data[index].background!.isEmpty?
+                              BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColor.appBlue.withOpacity(0.8)
+                              ):
+                              BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
                                       fit: BoxFit.cover,

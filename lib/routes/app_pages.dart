@@ -4,6 +4,8 @@ import '../modules/board_detail/bindings/board_detail_binding.dart';
 import '../modules/board_detail/views/board_detail_view.dart';
 import '../modules/change_password/bindings/change_password_binding.dart';
 import '../modules/change_password/views/change_password_view.dart';
+import '../modules/create_board/bindings/create_board_binding.dart';
+import '../modules/create_board/views/create_board_view.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/home/home_screen.dart';
 import '../modules/login/login_binding.dart';
@@ -66,17 +68,26 @@ class AppPages {
     ),
     GetPage(
       name: Routes.ADD_PROJECT,
+      transition: Transition.cupertino,
       page: () => const AddProjectView(),
     ),
     GetPage(
       name: Routes.PROJECT_DETAIL,
+      transition: Transition.cupertino,
       page: () => ProjectDetailView(),
       binding: ProjectDetailBinding(),
     ),
     GetPage(
       name: Routes.BOARD_DETAIL,
+      transition: Transition.cupertino,
       page: () => BoardDetailView(),
       binding: BoardDetailBinding(),
+    ),
+    GetPage(
+      name: Routes.CREATE_BOARD,
+      transition: Transition.cupertino,
+      page: () => CreateBoardView(),
+      binding: CreateBoardBinding(),
     ),
   ];
 }

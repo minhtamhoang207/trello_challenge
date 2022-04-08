@@ -48,6 +48,7 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
     try {
       await projectRepository.deleteProject(projectID: projectID);
       CommonWidget.hideLoading();
+      getProjects();
     } catch (e) {
       CommonWidget.hideLoading();
     }

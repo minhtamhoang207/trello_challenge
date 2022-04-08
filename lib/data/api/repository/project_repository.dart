@@ -1,4 +1,5 @@
 import 'package:trello_challenge/data/api/provider/project_provider.dart';
+import 'package:trello_challenge/data/model/request/create_board_request.dart';
 import 'package:trello_challenge/data/model/request/create_project_request.dart';
 import 'package:trello_challenge/data/model/response/project_response.dart';
 import '../../model/response/board_response.dart';
@@ -28,6 +29,14 @@ class ProjectRepository extends RestClient{
   Future<BoardResponse> getBoards({required String projectID}) async {
     final res = await projectProvider.getBoards(path: 'boards', projectID: projectID);
     return BoardResponse.fromJson(res.data);
+  }
+
+  Future<void> createBoard({required CreateBoardRequest data}) async {
+    await projectProvider.createBoard(path: 'boards', data: data);
+  }
+
+  Future<void> deleteBoard({required String boardID}) {
+    return projectProvider.deleteBoard(path: 'boards/$boardID');
   }
 
 

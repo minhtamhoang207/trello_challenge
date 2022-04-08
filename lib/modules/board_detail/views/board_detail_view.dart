@@ -8,22 +8,57 @@ import 'components/boardview/boardview.dart';
 import 'components/boardview/boardview_controller.dart';
 
 class BoardDetailView extends GetView<BoardDetailController> {
-  const BoardDetailView({Key? key}) : super(key: key);
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  BoardDetailView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.fitHeight,
-            image: NetworkImage(
-              '${controller.background}',
-            )
-          )
+      key: scaffoldKey,
+      appBar: AppBar(
+          backgroundColor: AppColor.appBlue,
+          title: const Text('Kaban board'),
+          leading: IconButton(
+            onPressed: ()=> Get.back(),
+            icon:Icon(Icons.adaptive.arrow_back),
+          ),
+          actions: [
+            IconButton(
+              onPressed:(){
+                scaffoldKey.currentState!.openEndDrawer();
+              },
+              icon: const Icon(Icons.settings),
+              tooltip: 'Thêm bảng mới',
+            ),
+          ],
         ),
-        child: BoardViewExample(background: controller.background),
-      )
+      endDrawer: Container(
+        width: Get.width - 100,
+        color: AppColor.white,
+        child: ListView(
+          children: [
+            ListTile(
+              onTap: (){},
+              leading: const Icon(Icons.image),
+              title: const Text('Update board\'s image')
+            ),
+            ListTile(
+              onTap: (){
+                controller.deleteBoard();
+                Get.back();
+              },
+              leading: const Icon(Icons.delete),
+              title: const Text('Delete board'),
+            ),
+            ListTile(
+              onTap: (){},
+              leading: const Icon(Icons.info_outline),
+              title: const Text('Information'),
+            )
+          ],
+        ),
+      ),
+      body: BoardViewExample(background: controller.background)
     );
   }
 }
@@ -60,7 +95,8 @@ class _BoardViewExampleState extends State<BoardViewExample> {
     return Scaffold(
       body: BoardView(
         backgroundColor: AppColor.darkLiver,
-        background: widget.background,
+        background: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/116281457.jpg?k=da47f863c0b7e6e5233c92c8fc7666ed73c3ceefae395823a300a4b4c93ce07c&o=&hp=1',
+        //background: widget.background,
         lists: _lists,
         onTapAddList: (){
           setState(() {

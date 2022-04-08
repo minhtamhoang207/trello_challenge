@@ -45,7 +45,8 @@ class RestClient extends GetxService {
     },
 
     onError: (err, handler) {
-      log('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}\n');
+      log('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}\n'
+          '---> ${err.message}');
       return handler.next(err);
     }));
   }
@@ -81,6 +82,8 @@ class RestClient extends GetxService {
       if (e.type == DioErrorType.response) {
         if (e.response?.statusCode == 404) {
           throw '404 NOT FOUND';
+        } else if (e.response!.statusCode! >= 500){
+          throw 'Server error';
         }
       }
       if (e.type == DioErrorType.other) {
