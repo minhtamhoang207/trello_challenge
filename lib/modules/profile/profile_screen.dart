@@ -20,7 +20,7 @@ class ProfileScreen extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            backgroundColor: AppColor.primaryColor,
+            backgroundColor: AppColor.white,
             body: controller.obx(
               (state) => RefreshIndicator(
                 onRefresh: () async {
@@ -29,140 +29,148 @@ class ProfileScreen extends GetView<ProfileController> {
                 child: ListView(
                   keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(right: 10, top: 20, bottom: 8),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: NeumorphicButton(
-                          style: NeumorphicStyle(
-                              color: AppColor.primaryColor,
-                              boxShape: const NeumorphicBoxShape.circle(),
-                              depth: 3,
-                              shadowLightColor: AppColor.white,
-                              intensity: 20,
-                              lightSource: LightSource.topLeft),
-                          onPressed: () => Get.toNamed(Routes.UPDATE_PROFILE,
-                              arguments: UpdateProfileParams(
-                                nickname: state?.data?.nickname ?? '',
-                                bio: state?.data?.bio ?? '',
-                              )),
-                          child: const Icon(Icons.edit_outlined),
-                        ),
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: AppColor.appBlue,
+                        borderRadius: const BorderRadius.only(
+                          bottomRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20)
+                        )
                       ),
-                    ),
-                    Center(
-                      child: Stack(
+                      child: Column(
                         children: [
-                          NeumorphicButton(
-                              style: NeumorphicStyle(
-                                  color: AppColor.primaryColor,
-                                  boxShape: const NeumorphicBoxShape.circle(),
-                                  depth: 4,
-                                  shadowLightColor: AppColor.white,
-                                  intensity: 100,
-                                  lightSource: LightSource.topLeft),
-                              onPressed: () {
-                                // controller.updateAvatar();
-                                Get.toNamed(Routes.PHOTO_VIEW, arguments: state?.data?.avatar??'');
-                              },
-                              child: Hero(
-                                tag: state?.data?.avatar??'',
-                                child: CachedNetworkImage(
-                                  imageUrl: state?.data?.avatar ?? '',
-                                  errorWidget: (context, url, error) => Icon(
-                                      CupertinoIcons.person,
-                                      size: 100,
-                                      color: AppColor.darkGray),
-                                  placeholder: (context, url) => Icon(
-                                      CupertinoIcons.person,
-                                      size: 100,
-                                      color: AppColor.darkGray),
-                                  imageBuilder: (context, imageProvider) => SizedBox(
-                                    height: 100,
-                                    width: 100,
-                                    child: CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage: imageProvider,
-                                    ),
-                                  ),
-                                ),
-                              )
-                          ),
-                          Positioned(
-                            bottom: 0,
-                              right: 0,
+                          Padding(
+                            padding:
+                            const EdgeInsets.only(right: 10, top: 20, bottom: 8),
+                            child: Align(
+                              alignment: Alignment.centerRight,
                               child: NeumorphicButton(
                                 style: NeumorphicStyle(
-                                    color: AppColor.primaryColor,
+                                    color: AppColor.white,
                                     boxShape: const NeumorphicBoxShape.circle(),
-                                    intensity: 10,
-                                    disableDepth: true,
-                                    border: const NeumorphicBorder()
+                                    depth: 1
                                 ),
-                                onPressed: ()=> controller.updateAvatar(),
-                                child: Icon(CupertinoIcons.camera_rotate_fill, size: 18, color: AppColor.darkLiver),
+                                onPressed: () => Get.toNamed(Routes.UPDATE_PROFILE,
+                                    arguments: UpdateProfileParams(
+                                      nickname: state?.data?.nickname ?? '',
+                                      bio: state?.data?.bio ?? '',
+                                    )),
+                                child: Icon(Icons.edit_outlined, color: AppColor.appBlue),
                               ),
-                          )
+                            ),
+                          ),
+                          Center(
+                              child: Stack(
+                                children: [
+                                  NeumorphicButton(
+                                      style: NeumorphicStyle(
+                                          color: AppColor.white,
+                                          boxShape: const NeumorphicBoxShape.circle(),
+                                          depth: 1),
+                                      onPressed: () {
+                                        // controller.updateAvatar();
+                                        Get.toNamed(Routes.PHOTO_VIEW, arguments: state?.data?.avatar??'');
+                                      },
+                                      child: Hero(
+                                        tag: state?.data?.avatar??'',
+                                        child: CachedNetworkImage(
+                                          imageUrl: state?.data?.avatar ?? '',
+                                          errorWidget: (context, url, error) => Icon(
+                                              CupertinoIcons.person,
+                                              size: 100,
+                                              color: AppColor.darkGray),
+                                          placeholder: (context, url) => Icon(
+                                              CupertinoIcons.person,
+                                              size: 100,
+                                              color: AppColor.darkGray),
+                                          imageBuilder: (context, imageProvider) => SizedBox(
+                                            height: 100,
+                                            width: 100,
+                                            child: CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage: imageProvider,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: NeumorphicButton(
+                                      style: NeumorphicStyle(
+                                          color: AppColor.white,
+                                          boxShape: const NeumorphicBoxShape.circle(),
+                                          intensity: 10,
+                                          disableDepth: true,
+                                          border: const NeumorphicBorder()
+                                      ),
+                                      onPressed: ()=> controller.updateAvatar(),
+                                      child: Icon(CupertinoIcons.camera_rotate_fill, size: 18, color: AppColor.appBlue),
+                                    ),
+                                  )
+                                ],
+                              )
+                          ),
+                          Padding(
+                            padding:
+                            const EdgeInsets.only(right: 23, top: 10, left: 23),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                state?.data?.username ?? '',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColor.white),
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                            visible: state!.data!.nickname!.isNotEmpty,
+                            child: Padding(
+                              padding:
+                              const EdgeInsets.only(right: 23, top: 8, left: 23),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '@${state.data!.nickname!}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontStyle: FontStyle.normal,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColor.white.withOpacity(0.8)),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                            visible: state.data!.bio!.isNotEmpty,
+                            child: Padding(
+                              padding:
+                              const EdgeInsets.only(right: 23, top: 20, left: 23),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '" ${state.data!.bio!} "',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 13.5,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColor.white),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
-                      )
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(right: 23, top: 10, left: 23),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          state?.data?.username ?? '',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: AppColor.darkLiver),
-                        ),
                       ),
                     ),
-                    Visibility(
-                      visible: state!.data!.nickname!.isNotEmpty,
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(right: 23, top: 8, left: 23),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '( ${state.data!.nickname!} )',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.w600,
-                                color: AppColor.darkLiver.withOpacity(0.8)),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: state.data!.bio!.isNotEmpty,
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(right: 23, top: 20, left: 23),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '" ${state.data!.bio!} "',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 13.5,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w500,
-                                color: AppColor.darkLiver),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Divider(thickness: 2),
                     ProfileButton(
-                      leadingIcon: const Icon(CupertinoIcons.at),
+                      leadingIcon: const Icon(CupertinoIcons.at, color: Colors.orange),
                       title: state.data?.email ?? '',
                       showRightArrow: true,
                       onPressed: () {
@@ -174,19 +182,19 @@ class ProfileScreen extends GetView<ProfileController> {
                       },
                     ),
                     ProfileButton(
-                      leadingIcon: const Icon(CupertinoIcons.square_list),
+                      leadingIcon: Icon(CupertinoIcons.square_list, color: AppColor.appBlue),
                       title: 'Công việc của tôi',
                       showRightArrow: true,
                       onPressed: () {},
                     ),
                     ProfileButton(
-                      leadingIcon: const Icon(CupertinoIcons.list_bullet),
+                      leadingIcon: const Icon(CupertinoIcons.list_bullet, color: Colors.deepOrange),
                       title: 'Hoạt động',
                       showRightArrow: true,
                       onPressed: () {},
                     ),
                     ProfileButton(
-                        leadingIcon: const Icon(CupertinoIcons.lock_rotation),
+                        leadingIcon: const Icon(CupertinoIcons.lock_rotation, color: Colors.blue,),
                         title: 'Đổi mật khẩu',
                         showRightArrow: true,
                         onPressed: () => Get.toNamed(Routes.CHANGE_PASSWORD)),

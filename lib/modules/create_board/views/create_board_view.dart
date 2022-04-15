@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
@@ -47,7 +46,8 @@ class CreateBoardView extends GetView<CreateBoardController> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Thêm bảng mới',
+                    controller.create?
+                    'Thêm bảng mới':'Chỉnh sửa thông tin bảng',
                     style: TextStyle(
                         fontSize: 21,
                         fontWeight: FontWeight.bold,
@@ -102,6 +102,7 @@ class CreateBoardView extends GetView<CreateBoardController> {
               ),
               InkWell(
                 onTap: () async {
+                  AppFocus.unFocus(context);
                   final DateTime? picked  = await showDatePicker(
                     context: context,
                     initialDatePickerMode: DatePickerMode.day,
@@ -148,11 +149,13 @@ class CreateBoardView extends GetView<CreateBoardController> {
                     lightSource: LightSource.topLeft),
                 onPressed: () async {
                   AppFocus.unFocus(context);
-                  controller.createBoards();
+                  controller.create?
+                  controller.createBoards():controller.editBoards();
                 },
                 child: Center(
                   child: Text(
-                    'Tạo bảng',
+                    controller.create?
+                    'Tạo bảng':'Chỉnh sửa',
                     style: TextStyle(
                         color: AppColor.darkGray,
                         fontWeight: FontWeight.w600,

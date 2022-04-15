@@ -59,7 +59,6 @@ class AppPages {
       name: Routes.PHOTO_VIEW,
       page: () => PhotoViewView(),
       binding: PhotoViewBinding(),
-      transition: Transition.native,
     ),
     GetPage(
       name: Routes.WORKSPACE,
@@ -74,7 +73,7 @@ class AppPages {
     GetPage(
       name: Routes.PROJECT_DETAIL,
       transition: Transition.cupertino,
-      page: () => ProjectDetailView(),
+      page: () => const ProjectDetailView(),
       binding: ProjectDetailBinding(),
     ),
     GetPage(

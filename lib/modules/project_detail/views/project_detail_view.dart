@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/widgets/empty_list.dart';
 
+import '../../../data/model/params/board_detail_params.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../shared/constants/colors.dart';
 import '../controllers/project_detail_controller.dart';
@@ -51,10 +52,12 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
                     itemBuilder: (BuildContext context, int index){
                       return GestureDetector(
                         onTap: (){
-                          Get.toNamed(Routes.BOARD_DETAIL, arguments: {
-                            'background': state.data[index].background,
-                            'boardID': state.data[index].id
-                          });
+                          Get.toNamed(Routes.BOARD_DETAIL, arguments: BoardDetailParams(
+                            backGround: state.data[index].background!,
+                            boardID: state.data[index].id,
+                            boardName: state.data[index].name!,
+                            expireDate: state.data[index].closedAt,
+                          ));
                         },
                         child: Stack(
                           children: [

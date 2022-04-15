@@ -15,7 +15,7 @@ class ProfileButton extends StatelessWidget {
       padding: const EdgeInsets.only(right: 23, top: 30, left: 23),
       child: NeumorphicButton(
         style: NeumorphicStyle(
-            color: AppColor.primaryColor,
+            color: AppColor.white,
             depth: 4,
             shadowLightColor: AppColor.white,
             intensity: 100,

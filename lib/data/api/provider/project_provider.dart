@@ -39,6 +39,10 @@ class ProjectProvider {
         url: path, method: Method.POST, params: data.toJson());
   }
 
+  Future<Response> updateBoard({required String path, required CreateBoardRequest data}) {
+    return restClient.request(url: path, method: Method.PUT, params: data.toJson());
+  }
+
   Future<Response> deleteBoard({required String path}) {
     return restClient.request(url: path, method: Method.DELETE);
   }

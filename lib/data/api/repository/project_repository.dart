@@ -35,6 +35,10 @@ class ProjectRepository extends RestClient{
     await projectProvider.createBoard(path: 'boards', data: data);
   }
 
+  Future<void> updateBoard({required CreateBoardRequest data, required String boardID}) async {
+    await projectProvider.updateBoard(path: 'boards/$boardID', data: data);
+  }
+
   Future<void> deleteBoard({required String boardID}) {
     return projectProvider.deleteBoard(path: 'boards/$boardID');
   }

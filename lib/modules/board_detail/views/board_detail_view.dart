@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
+import '../../../data/model/params/board_detail_params.dart';
 import '../controllers/board_detail_controller.dart';
 import 'components/boardview/board_item.dart';
 import 'components/boardview/board_list.dart';
@@ -40,7 +42,20 @@ class BoardDetailView extends GetView<BoardDetailController> {
             ListTile(
               onTap: (){},
               leading: const Icon(Icons.image),
-              title: const Text('Update board\'s image')
+              title: const Text('Chỉnh sửa hình nền')
+            ),
+            ListTile(
+                onTap: () async {
+                  Get.back();
+                  await Get.toNamed(Routes.CREATE_BOARD, arguments: BoardDetailParams(
+                    backGround: controller.arguments.backGround,
+                    boardID: controller.arguments.boardID,
+                    boardName: controller.arguments.boardName,
+                    expireDate: controller.arguments.expireDate,
+                  ));
+                },
+                leading: const Icon(Icons.edit),
+                title: const Text('Chỉnh sửa thông tin bảng')
             ),
             ListTile(
               onTap: (){
@@ -48,17 +63,17 @@ class BoardDetailView extends GetView<BoardDetailController> {
                 Get.back();
               },
               leading: const Icon(Icons.delete),
-              title: const Text('Delete board'),
+              title: const Text('Xóa bảng'),
             ),
             ListTile(
               onTap: (){},
               leading: const Icon(Icons.info_outline),
-              title: const Text('Information'),
+              title: const Text('Thông tin bảng'),
             )
           ],
         ),
       ),
-      body: BoardViewExample(background: controller.background)
+      body: BoardViewExample(background: controller.arguments.backGround)
     );
   }
 }

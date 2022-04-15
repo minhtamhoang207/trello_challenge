@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:trello_challenge/data/model/params/board_detail_params.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 
 import '../../../data/api/repository/project_repository.dart';
@@ -10,8 +11,7 @@ class BoardDetailController extends GetxController {
   final ProjectRepository projectRepository;
   BoardDetailController({required this.projectRepository});
 
-  final background = Get.arguments['background'];
-  final boardID = Get.arguments['boardID'];
+  final BoardDetailParams arguments = Get.arguments;
 
   @override
   void onInit() {
@@ -21,7 +21,7 @@ class BoardDetailController extends GetxController {
   void deleteBoard() async {
     CommonWidget.showLoading();
     try {
-      await projectRepository.deleteBoard(boardID: boardID);
+      await projectRepository.deleteBoard(boardID: arguments.boardID);
       CommonWidget.hideLoading();
       Get.back();
       Get.find<ProjectDetailController>().getBoards();

@@ -25,8 +25,7 @@ class WorkspaceView extends GetView<WorkspaceController> {
             backgroundColor: AppColor.white,
             appBar: AppBar(
               backgroundColor: AppColor.appBlue,
-              title: const Text('My workspace'),
-              centerTitle: true,
+              title: const Text('Workspace'),
               actions: [
                 IconButton(
                     onPressed:(){
@@ -253,6 +252,8 @@ class WorkspaceView extends GetView<WorkspaceController> {
                   ],
                 ),
               ),
-            )));
+            ),
+        )
+    );
   }
 }
