@@ -19,18 +19,18 @@ class WorkspaceView extends GetView<WorkspaceController> {
     return SafeArea(
         child: Scaffold(
             backgroundColor: AppColor.primaryColor,
-            // appBar: AppBar(
-            //   title: const Text('My workspace'),
-            //   actions: [
-            //     IconButton(
-            //         onPressed:(){
-            //            Get.toNamed(Routes.ADD_PROJECT);
-            //         },
-            //         icon: const Icon(Icons.add_outlined),
-            //         tooltip: 'Thêm project mới',
-            //     ),
-            //   ],
-            // ),
+            appBar: AppBar(
+              title: const Text('Workspace'),
+              actions: [
+                IconButton(
+                    onPressed:(){
+                       Get.toNamed(Routes.ADD_PROJECT);
+                    },
+                    icon: const Icon(Icons.add_outlined),
+                    tooltip: 'Thêm project mới',
+                ),
+              ],
+            ),
             body: controller.obx(
                   (state) => RefreshIndicator(
                 onRefresh: () async {
