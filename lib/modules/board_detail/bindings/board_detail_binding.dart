@@ -6,7 +6,7 @@ class BoardDetailBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<BoardDetailController>(
-      () => BoardDetailController(projectRepository: Get.find()),
+      () => BoardDetailController(projectRepository: Get.find(), boardRepository: Get.find()),
     );
   }
 }

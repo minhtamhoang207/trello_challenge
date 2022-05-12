@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:trello_challenge/modules/board_detail/views/components/boardview/vs_scrollbar.dart';
 import 'dart:core';
 
@@ -343,21 +344,24 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
         controller: boardViewController,
         itemBuilder: (BuildContext context, int index) {
           if(index == widget.lists!.length){
-            return InkWell(
-                onTap: widget.onTapAddList,
-                child: Container(
-                  decoration: BoxDecoration(
+            return Column(
+              children: [
+                const Gap(12),
+                InkWell(
+                  onTap: widget.onTapAddList,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                    margin: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
                       color: Colors.white30,
-                      borderRadius: BorderRadius.circular(8)
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: const Text('Thêm cột',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Text("Thêm danh sách"),
-                      SizedBox(width: 15),
-                      Icon(Icons.add, size: 13)
-                    ],
-                  ),
-                )
+                ),
+              ],
             );
           }
           else{

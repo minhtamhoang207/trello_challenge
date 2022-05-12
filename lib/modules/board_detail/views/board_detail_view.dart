@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trello_challenge/data/model/response/board_column_response.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
 import '../../../data/model/params/board_detail_params.dart';
@@ -88,35 +89,42 @@ class BoardViewExample extends StatefulWidget {
 }
 
 class _BoardViewExampleState extends State<BoardViewExample> {
-  final List<BoardListObject> _listData = [
-    BoardListObject(title: "List title 1",
-        items: [BoardItemObject(title: 'it me Tom hehe 1'),
-          BoardItemObject(title: 'it me Tom hehe 2') ,
-          BoardItemObject(title: 'it me Tom hehe 3')]
-    ),
-    BoardListObject(title: "List title 2"),
-    BoardListObject(title: "List title 3")
-  ];
 
   //Can be used to animate to different sections of the BoardView
   BoardViewController boardViewController = BoardViewController();
+  final controller = Get.find<BoardDetailController>();
+
+
+  @override
+  void initState() {
+
+  }
+
+
+  @override
+  void didChangeDependencies() async {
+    await controller.getColumn();
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     List<BoardList> _lists = [];
-    for (int i = 0; i < _listData.length; i++) {
-      _lists.add(_createBoardList(_listData[i], i) as BoardList);
+    for (int i = 0; i < controller.listData.length; i++) {
+      _lists.add(_createBoardList(controller.listData[i], i) as BoardList);
     }
     return Scaffold(
       body: BoardView(
         backgroundColor: AppColor.darkLiver,
-        background: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/116281457.jpg?k=da47f863c0b7e6e5233c92c8fc7666ed73c3ceefae395823a300a4b4c93ce07c&o=&hp=1',
+        background: 'https://www.imgacademy.com/sites/default/files/2009-stadium-about.jpg',
         //background: widget.background,
         lists: _lists,
-        onTapAddList: (){
-          setState(() {
-            _listData.add(BoardListObject(title: "List title ${_listData.length}"));
-          });
+        onTapAddList: () async {
+          await controller.addColumn(columnName: 'TomDeyyy', seqNo: controller.listData.length);
+          await controller.getColumn();
+          setState(() {});
         },
         boardViewController: boardViewController,
         bottomPadding: 100,
@@ -124,7 +132,7 @@ class _BoardViewExampleState extends State<BoardViewExample> {
     );
   }
 
-  Widget buildBoardItem(BoardItemObject itemObject) {
+  Widget buildBoardItem(Task itemObject) {
     return BoardItem(
         onStartDragItem: (int? listIndex, int? itemIndex, BoardItemState? state) {
 
@@ -132,25 +140,26 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         onDropItem: (int? listIndex, int? itemIndex, int? oldListIndex,
             int? oldItemIndex, BoardItemState? state) {
           //Used to update our local item data
-          var item = _listData[oldListIndex!].items![oldItemIndex!];
-          _listData[oldListIndex].items!.removeAt(oldItemIndex);
-          _listData[listIndex!].items!.insert(itemIndex!, item);
+          var item = controller.listData[oldListIndex!].tasks[oldItemIndex!];
+          controller.listData[oldListIndex].tasks.removeAt(oldItemIndex);
+          controller.listData[listIndex!].tasks.insert(itemIndex!, item);
         },
         onTapItem: (int? listIndex, int? itemIndex, BoardItemState? state) async {
-
+          print('dasdasdasdasdasd');
+          print(controller.listData[listIndex!].id);
         },
         item: Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(itemObject.title! + 'hehe'),
+            child: Text(itemObject.name),
           ),
         ));
   }
 
   Widget _createBoardList(BoardListObject list, int index) {
     List<BoardItem> items = [];
-    for (int i = 0; i < list.items!.length; i++) {
-      items.insert(i, buildBoardItem(list.items![i]) as BoardItem);
+    for (int i = 0; i < list.tasks.length; i++) {
+      items.insert(i, buildBoardItem(list.tasks[i]) as BoardItem);
     }
     return BoardList(
       onStartDragList: (int? listIndex) {
@@ -161,9 +170,9 @@ class _BoardViewExampleState extends State<BoardViewExample> {
       },
       onDropList: (int? listIndex, int? oldListIndex) {
         //Update our local list data
-        var list = _listData[oldListIndex!];
-        _listData.removeAt(oldListIndex);
-        _listData.insert(listIndex!, list);
+        var list = controller.listData[oldListIndex!];
+        controller.listData.removeAt(oldListIndex);
+        controller.listData.insert(listIndex!, list);
       },
       headerBackgroundColor: Colors.deepPurpleAccent,
       backgroundColor: Colors.orangeAccent,
@@ -172,23 +181,29 @@ class _BoardViewExampleState extends State<BoardViewExample> {
             child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: Text(
-                  list.title!,
+                  list.name,
                   style: const TextStyle(fontSize: 20),
                 ))),
       ],
       footer: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: InkWell(
-          onTap: (){
-            // print('Day la index $index');
+          onTap: () async {
+            print('------->>>>> Column index:$index');
+            await controller.addTask(
+                columnID: controller.listData[index].id,
+                seqNo: controller.listData[index].tasks.length,
+                taskName: 'Task ${controller.listData[index].tasks.length}'
+            );
+            await controller.getColumn();
             setState(() {
-              _listData[index].items?.add(BoardItemObject(title: 'it me Tom hehe 2'));
+
             });
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Text('add task'),
+              Text('Add task'),
               Icon(Icons.add)
             ],
           ),
@@ -198,25 +213,3 @@ class _BoardViewExampleState extends State<BoardViewExample> {
     );
   }
 }
-
-class BoardItemObject{
-
-  String? title;
-
-  BoardItemObject({this.title}){
-    title ??= "";
-  }
-
-}
-
-class BoardListObject{
-
-  String? title;
-  List<BoardItemObject>? items;
-
-  BoardListObject({this.title,this.items}){
-    title ??= "";
-    items ??= [];
-  }
-}
-
