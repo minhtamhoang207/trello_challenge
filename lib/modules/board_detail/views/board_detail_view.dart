@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trello_challenge/data/model/response/board_column_response.dart';
@@ -121,10 +123,23 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         background: 'https://www.imgacademy.com/sites/default/files/2009-stadium-about.jpg',
         //background: widget.background,
         lists: _lists,
-        onTapAddList: () async {
-          await controller.addColumn(columnName: 'TomDeyyy', seqNo: controller.listData.length);
-          await controller.getColumn();
-          setState(() {});
+        onTapAddList: () {
+          Get.dialog(
+            Column(
+              children: [
+                TextField(),
+                Row(
+                  children: [
+                    TextButton(onPressed: (){}, child: Text('cancel')),
+                    TextButton(onPressed: (){}, child: Text('add'))
+                  ],
+                )
+              ],
+            )
+          );
+          // await controller.addColumn(columnName: 'TomDeyyy', seqNo: controller.listData.length);
+          // await controller.getColumn();
+          // setState(() {});
         },
         boardViewController: boardViewController,
         bottomPadding: 100,
@@ -135,6 +150,7 @@ class _BoardViewExampleState extends State<BoardViewExample> {
   Widget buildBoardItem(Task itemObject) {
     return BoardItem(
         onStartDragItem: (int? listIndex, int? itemIndex, BoardItemState? state) {
+          log('>>>>>> onStartDragItem: listIndex: $listIndex - itemIndex: $itemIndex - oldListIndex: $itemIndex');
 
         },
         onDropItem: (int? listIndex, int? itemIndex, int? oldListIndex,
@@ -143,10 +159,14 @@ class _BoardViewExampleState extends State<BoardViewExample> {
           var item = controller.listData[oldListIndex!].tasks[oldItemIndex!];
           controller.listData[oldListIndex].tasks.removeAt(oldItemIndex);
           controller.listData[listIndex!].tasks.insert(itemIndex!, item);
+
+          log('>>>>>> onDropItem: listIndex: $listIndex - itemIndex: $itemIndex - oldListIndex: $oldListIndex');
+
         },
         onTapItem: (int? listIndex, int? itemIndex, BoardItemState? state) async {
-          print('dasdasdasdasdasd');
-          print(controller.listData[listIndex!].id);
+          // print('dasdasdasdasdasd');
+          // print(controller.listData[listIndex!].id);
+          log('>>>>>> onTapItem: listIndex: $listIndex - itemIndex: $itemIndex');
         },
         item: Card(
           child: Padding(
@@ -163,16 +183,18 @@ class _BoardViewExampleState extends State<BoardViewExample> {
     }
     return BoardList(
       onStartDragList: (int? listIndex) {
-
+        log('>>>>>> onStartDragList: listIndex: $listIndex');
       },
       onTapList: (int? listIndex) async {
-        //print(listIndex.toString() + 'kkkkkkk');
+        log('>>>>>> onTapList: listIndex: $listIndex');
       },
       onDropList: (int? listIndex, int? oldListIndex) {
         //Update our local list data
         var list = controller.listData[oldListIndex!];
         controller.listData.removeAt(oldListIndex);
         controller.listData.insert(listIndex!, list);
+
+        log('>>>>>> onDropList: listIndex: $listIndex - oldIndex: $oldListIndex');
       },
       headerBackgroundColor: Colors.deepPurpleAccent,
       backgroundColor: Colors.orangeAccent,
@@ -189,16 +211,14 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         padding: const EdgeInsets.only(bottom: 10),
         child: InkWell(
           onTap: () async {
-            print('------->>>>> Column index:$index');
+            log('------->>>>> Column index: $index');
             await controller.addTask(
                 columnID: controller.listData[index].id,
                 seqNo: controller.listData[index].tasks.length,
                 taskName: 'Task ${controller.listData[index].tasks.length}'
             );
             await controller.getColumn();
-            setState(() {
-
-            });
+            setState(() {});
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

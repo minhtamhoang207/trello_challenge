@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:trello_challenge/data/api/repository/auth_repository.dart';
 import 'package:trello_challenge/data/model/request/login_request.dart';
 import 'package:trello_challenge/data/model/request/verify_mail_request.dart';
@@ -20,8 +22,16 @@ class LoginController extends GetxController {
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
-
   final SharedPreferences _sharedPreferences = Get.find();
+  // final Socket socket = io('https://t.itptit.com/socket.io', <String, dynamic>{
+  //   "transports": ["websocket"],
+  // });
+
+
+  @override
+  void onInit() {
+    // connectToServer();
+  }
 
   bool validInformation() {
     if (userNameController.text.trim().isNotEmpty &&
@@ -61,20 +71,20 @@ class LoginController extends GetxController {
             data: LoginRequest(
                 userName: userNameController.text,
                 password: passwordController.text));
-        _sharedPreferences.setString(
-            StorageConstants.token, response.data.accessToken);
+        _sharedPreferences.setString(StorageConstants.token, response.data.accessToken);
+        await connectAndListen(token: response.data.accessToken);
         CommonWidget.hideLoading();
         Get.offAllNamed(Routes.home);
       } catch (e) {
         log(e.toString());
         CommonWidget.hideLoading();
-        Get.dialog(
-            CustomDialog(dialogType: DialogType.failed, message: e.toString()));
+        Get.dialog(CustomDialog(dialogType: DialogType.failed, message: e.toString()));
       }
     } else {
       showError();
     }
   }
+  
 
   verifyEmail(VerifyEmailType verifyEmailType) async {
     if (Regex.isEmail(emailController.text)) {
@@ -99,6 +109,56 @@ class LoginController extends GetxController {
       CommonWidget.toast('Email không hợp lệ');
     }
   }
+
+  // void connectToServer() {
+  //   try {
+  //     socket.connect();
+  //     print('login connect ${socket.connected}');
+  //     socket.onError((data) => log('SOCKET ERR: $data'));
+  //     // socket.on('connect', (_) => print('connect: ${socket.id}'));
+  //   } catch (e) {
+  //     log(e.toString());
+  //   }
+  // }
+
+  connectAndListen({required String token}) async {
+    try{
+      IO.Socket socket = IO.io("https://t.itptit.com/socket.io", <String, dynamic>{
+        "transports": ["websocket"],
+      });
+
+      socket.onConnect((_) {
+        print('connect login socket');
+        socket.emit('login', {
+          "accessToken": token
+        });
+        socket.on('login', (data) => log('login socket data : $data'));
+        log('connect socket status--- ${socket.connected}');
+      });
+      await Future.delayed(const Duration(seconds: 5)).then((value){
+        socket.emit('subscribe', {
+          "type": "Board",
+          "targetId": '627c7d95ea93db1273af79d3'
+        });
+        socket.on('subscribe', (data) => log('subscribe board data: $data'));
+      });
+      socket.onError((data) => log('LOGIN SOCKET ERR: $data'));
+    } catch (e){
+      print(e.toString());
+    }
+
+  }
+
+  // loginSocket(Map<String, dynamic> data) async {
+  //   try{
+  //     socket.emit('login', data);
+  //     socket.onError((data) => log('LOGIN SOCKET ERR: $data'));
+  //     log('hey Tompeipei: ${socket.connected}');
+  //     log('logged in to socket');
+  //   } catch (e){
+  //     log(e.toString());
+  //   }
+  // }
 
   @override
   void dispose() {
