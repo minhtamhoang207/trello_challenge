@@ -348,19 +348,24 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
           if(index == widget.lists!.length){
             return Column(
               children: [
-                const Gap(12),
                 InkWell(
                   onTap: widget.onTapAddList,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                     margin: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white30,
+                      color: Colors.black54,
                       borderRadius: BorderRadius.circular(10)
                     ),
-                    child: const Text('Thêm cột',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    child: Row(
+                      children: const [
+                        Icon(Icons.add, color: Colors.white, size: 13),
+                        Gap(10),
+                        Text('Thêm cột mới',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ],
+                    )
                   ),
                 ),
               ],

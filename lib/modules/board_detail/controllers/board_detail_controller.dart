@@ -29,11 +29,11 @@ class BoardDetailController extends GetxController {
   List<BoardListObject> listData = [];
 
   Future<void> getColumn() async {
-    // final res = await boardRepository.getBoardColumn(boardID: arguments.boardID);
-    final res = await boardRepository.getBoardColumn(boardID: '6283cf98b1a3e6f7ae54f5a9');
-    for(int i = 0; i < res.data.length; i ++){
-      res.data[i].tasks.sort((a, b) => a.seqNo.compareTo(b.seqNo));
-    }
+    final res = await boardRepository.getBoardColumn(boardID: arguments.boardID);
+    // final res = await boardRepository.getBoardColumn(boardID: '6283cf98b1a3e6f7ae54f5a9');
+    // for(int i = 0; i < res.data.length; i ++){
+    //   res.data[i].tasks.sort((a, b) => a.seqNo.compareTo(b.seqNo));
+    // }
     //someObjects.sort((a, b) => a.someProperty.compareTo(b.someProperty));
     listData = res.data;
   }
@@ -44,6 +44,28 @@ class BoardDetailController extends GetxController {
         columnName: columnName,
         seqNo: seqNo
     );
+  }
+
+  Future<void> editColumn({required String columnName, required int seqNo, required String columnID}) async {
+    CommonWidget.showLoading();
+    try {
+      await boardRepository.editColumn(columnName: columnName, seqNo: seqNo, boardID: arguments.boardID, columnID: columnID);
+      CommonWidget.hideLoading();
+    } catch (e) {
+      CommonWidget.toast(e.toString());
+      CommonWidget.hideLoading();
+    }
+  }
+
+  Future<void> deleteColumn({required String columnID}) async {
+    CommonWidget.showLoading();
+    try {
+      await boardRepository.deleteColumn(columnID: columnID);
+      CommonWidget.hideLoading();
+    } catch (e) {
+      CommonWidget.toast(e.toString());
+      CommonWidget.hideLoading();
+    }
   }
 
   Future<void> addTask({required String columnID, required int seqNo, required taskName}) async {
@@ -85,31 +107,6 @@ class BoardDetailController extends GetxController {
       CommonWidget.hideLoading();
     }
   }
-
-  // void subscribeToBoard() {
-  //   try {
-  //     socket.connect();
-  //     socket.emit('subscribe', {
-  //       "type": "Board",
-  //       "targetId": arguments.boardID
-  //     });
-  //     socket.on('create_task', (data) => log('tom oi o day nek ${data.toString()}'));
-  //     socket.on('create_column', (data) => log('tom oi o day nek ${data.toString()}'));
-  //     socket.on('move_column', (data) => log('tom oi o day nek ${data.toString()}'));
-  //     socket.on('update_column', (data) => log('tom oi o day nek ${data.toString()}'));
-  //     socket.on('delete_column', (data) => log('tom oi o day nek ${data.toString()}'));
-  //     socket.on('move_task', (data) => log('tom oi o day nek ${data.toString()}'));
-  //     socket.on('update_task', (data) => log('tom oi o day nek ${data.toString()}'));
-  //     socket.on('board_update', (data) => log('tom oi o day nek ${data.toString()}'));
-  //
-  //     log('connect socket status" ${socket.connect().connected}');
-  //
-  //
-  //     log('subscribed to board ${arguments.boardID}');
-  //   } catch (e) {
-  //     log(e.toString());
-  //   }
-  // }
 
   @override
   void onClose() {}

@@ -44,6 +44,18 @@ class BoardProvider {
     });
   }
 
+  Future<Response> editColumn({required String path, required String columnName, required int seqNo, required boardID}) {
+    return restClient.request(url: path, method: Method.PUT, params: {
+      "name": columnName,
+      "seq_no": seqNo,
+      "board": boardID
+    });
+  }
+
+  Future<Response> deleteColumn({required String path}) {
+    return restClient.request(url: path, method: Method.DELETE);
+  }
+
   Future<Response> moveTask({required String path, required int toSeq, required String toColumn}) {
     return restClient.request(url: path, method: Method.PUT, params: {
       "toColumn": toColumn,

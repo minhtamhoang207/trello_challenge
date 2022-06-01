@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
+import 'package:trello_challenge/shared/utils/color_extension.dart';
 import 'package:trello_challenge/shared/widgets/empty_list.dart';
 
 import '../../../data/model/params/board_detail_params.dart';
@@ -53,19 +54,18 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
                       return GestureDetector(
                         onTap: (){
                           Get.toNamed(Routes.BOARD_DETAIL, arguments: BoardDetailParams(
-                            backGround: state.data[index].background!,
+                            background: state.data[index].background!,
                             boardID: state.data[index].id,
                             boardName: state.data[index].name!,
-                            expireDate: state.data[index].closedAt,
                           ));
                         },
                         child: Stack(
                           children: [
                             Container(
-                              decoration: state.data[index].background!.isEmpty?
+                              decoration: state.data[index].background![0] == '#'?
                               BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: AppColor.appBlue.withOpacity(0.8)
+                                  color: HexColor(state.data[index].background!)
                               ):
                               BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),

@@ -1,12 +1,18 @@
 import 'dart:developer';
+import 'dart:ffi';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:trello_challenge/data/model/response/board_column_response.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
+import 'package:trello_challenge/shared/utils/color_extension.dart';
 import '../../../data/model/params/board_detail_params.dart';
+import '../../../gen/assets.gen.dart';
 import '../controllers/board_detail_controller.dart';
 import 'components/boardview/board_item.dart';
 import 'components/boardview/board_list.dart';
@@ -23,7 +29,7 @@ class BoardDetailView extends GetView<BoardDetailController> {
       key: scaffoldKey,
       appBar: AppBar(
           backgroundColor: AppColor.appBlue,
-          title: const Text('Kaban board'),
+          title: Text(controller.arguments.boardName),
           leading: IconButton(
             onPressed: ()=> Get.back(),
             icon:Icon(Icons.adaptive.arrow_back),
@@ -52,10 +58,9 @@ class BoardDetailView extends GetView<BoardDetailController> {
                 onTap: () async {
                   Get.back();
                   await Get.toNamed(Routes.CREATE_BOARD, arguments: BoardDetailParams(
-                    backGround: controller.arguments.backGround,
+                    background: controller.arguments.background,
                     boardID: controller.arguments.boardID,
                     boardName: controller.arguments.boardName,
-                    expireDate: controller.arguments.expireDate,
                   ));
                 },
                 leading: const Icon(Icons.edit),
@@ -77,7 +82,7 @@ class BoardDetailView extends GetView<BoardDetailController> {
           ],
         ),
       ),
-      body: BoardViewExample(background: controller.arguments.backGround)
+      body: BoardViewExample(background: controller.arguments.background)
     );
   }
 }
@@ -108,8 +113,8 @@ class _BoardViewExampleState extends State<BoardViewExample> {
     try{
       socket.emit('subscribe', {
         "type": "Board",
-        // "targetId": controller.arguments.boardID
-        "targetId": '6283cf98b1a3e6f7ae54f5a9'
+        "targetId": controller.arguments.boardID
+        // "targetId": '6283cf98b1a3e6f7ae54f5a9'
       });
       socket.on('subscribe', (data) => log('>>>>>>>>>>>>>>>>>>>>>>>>>>> subscribe board data: $data'));
       // log('connect socket status" ${socket.connected}');
@@ -155,13 +160,6 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         await controller.getColumn();
         setState(() {});
       });
-      // socket.on('create_column', (data) => log('tom oi o day nek ${data.toString()}'));
-      // socket.on('move_column', (data) => log('tom oi o day nek ${data.toString()}'));
-      // socket.on('update_column', (data) => log('tom oi o day nek ${data.toString()}'));
-      // socket.on('delete_column', (data) => log('tom oi o day nek ${data.toString()}'));
-      // socket.on('move_task', (data) => log('tom oi o day nek ${data.toString()}'));
-      // socket.on('update_task', (data) => log('tom oi o day nek ${data.toString()}'));
-      // socket.on('board_update', (data) => log('tom oi o day nek ${data.toString()}'));
     } catch (e){
       print(':::::::: ${e.toString()}');
     }
@@ -185,12 +183,11 @@ class _BoardViewExampleState extends State<BoardViewExample> {
     }
     return Scaffold(
       body: BoardView(
-        backgroundColor: AppColor.darkLiver,
-        background: 'https://www.imgacademy.com/sites/default/files/2009-stadium-about.jpg',
-        //background: widget.background,
+        backgroundColor: widget.background[0] == '#'?HexColor(widget.background):Colors.white,
+        background: widget.background[0] == '#'?null:widget.background,
         lists: _lists,
         onTapAddList: () {
-          _displayDialog(context, hint: 'Tên cột', title: 'Nhập tên cột', onPress: () async {
+          _displayDialog(context, hint: 'Cột 1 ...', title: 'Nhập tên cột', onPress: () async {
             await controller.addColumn(columnName: textController.text, seqNo: controller.listData.length);
             Navigator.pop(context);
             textController.clear();
@@ -228,9 +225,8 @@ class _BoardViewExampleState extends State<BoardViewExample> {
 
         },
         onTapItem: (int? listIndex, int? itemIndex, BoardItemState? state) async {
-          // print('dasdasdasdasdasd');
-          // print(controller.listData[listIndex!].id);
           log('>>>>>> onTapItem: listIndex: $listIndex - itemIndex: $itemIndex');
+          _displayBottomSheet(context);
         },
         item: Card(
           child: Padding(
@@ -264,23 +260,82 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         await controller.getColumn();
         setState(() {});
       },
-      headerBackgroundColor: Colors.deepPurpleAccent,
-      backgroundColor: Colors.orangeAccent,
+      headerBackgroundColor: Colors.white60,
+      backgroundColor: Colors.white60,
       header: [
         Expanded(
             child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Text(
-                  list.name,
-                  style: const TextStyle(fontSize: 20),
-                ))),
+                padding: const EdgeInsets.only(left: 15),
+                child: Row(
+                  children: [
+                    Expanded(child: Text(
+                      list.name,
+                      style: const TextStyle(fontSize: 18),
+                    )),
+                    PopupMenuButton<String>(
+                      padding: const EdgeInsets.all(0),
+                      elevation: 0,
+                      icon: SvgPicture.asset(
+                        Assets.svgs.icDotMenu,
+                        height: 12,
+                        width: 12,
+                      ),
+                      onSelected: (String result) {
+                        switch (result) {
+                          case 'delete':
+                           controller.deleteColumn(columnID: controller.listData[index].id );
+                            break;
+                          case 'edit':
+                            textController.text = controller.listData[index].name;
+                            _displayDialog(context, hint: 'Cột 1 ...', title: 'Nhập tên cột', onPress: () async {
+                              await controller.editColumn(
+                                  columnName: textController.text,
+                                  seqNo: index,
+                                  columnID: controller.listData[index].id
+                              );
+                              Navigator.pop(context);
+                              textController.clear();
+                              await controller.getColumn();
+                              setState(() {});
+                            });
+                            break;
+                          default:
+                        }
+                      },
+                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                            value: 'edit',
+                            child: Row(
+                              children: const [
+                                Icon(Icons.edit, size: 15),
+                                Gap(15),
+                                Text('Chỉnh sửa cột'),
+                              ],
+                            )
+                        ),
+                        PopupMenuItem<String>(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                Icon(CupertinoIcons.delete, size: 15, color: AppColor.red),
+                                const Gap(15),
+                                const Text('Xóa cột'),
+                              ],
+                            )
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+            )
+        ),
       ],
       footer: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: InkWell(
           onTap: () {
             log('------->>>>> Column index: $index');
-            _displayDialog(context, hint: 'Tên task', title: 'Nhập tên task', onPress: () async {
+            _displayDialog(context, hint: 'Thẻ 1 ...', title: 'Nhập tên thẻ', onPress: () async {
               await controller.addTask(
                   columnID: controller.listData[index].id,
                   seqNo: controller.listData[index].tasks.length,
@@ -292,12 +347,18 @@ class _BoardViewExampleState extends State<BoardViewExample> {
               setState(() {});
             });
           },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text('Add task'),
-              Icon(Icons.add)
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Gap(10),
+                Icon(Icons.add, size: 12),
+                Gap(10),
+                Text('Thêm thẻ'),
+              ],
+            ),
           ),
         ),
       ),
@@ -330,5 +391,24 @@ class _BoardViewExampleState extends State<BoardViewExample> {
             ],
           );
         });
+  }
+
+  _displayBottomSheet(BuildContext context){
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.8,
+          minChildSize: 0.2,
+          maxChildSize: 0.8,
+          builder: (_, controller) {
+            return Container(color: Colors.red);
+          },
+        );
+      },
+    );
   }
 }

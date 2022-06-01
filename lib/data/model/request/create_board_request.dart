@@ -1,14 +1,13 @@
 class CreateBoardRequest {
   String boardName;
   String projectID;
-  DateTime expireDate;
+  String background;
 
-  CreateBoardRequest({required this.boardName, required this.expireDate, required this.projectID});
+  CreateBoardRequest({required this.boardName, required this.projectID, required this.background});
 
   Map<String, dynamic> toJson() => {
     "name": boardName,
-    "closed_at": expireDate.toIso8601String(),
-    "background": '',
+    "background": background,
     "project": projectID
   };
 }

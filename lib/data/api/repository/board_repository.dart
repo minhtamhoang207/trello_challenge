@@ -42,6 +42,15 @@ class BoardRepository extends RestClient{
     await boardProvider.moveColumn(path: 'board-columns/$columnID/move', toIndex: toIndex);
   }
 
+
+  Future<void> editColumn({required String columnName, required int seqNo, required boardID, required String columnID}) async {
+    await boardProvider.editColumn(path: 'board-columns/$columnID', columnName: columnName, seqNo: seqNo, boardID: boardID);
+  }
+
+  Future<void> deleteColumn({required String columnID}) async {
+    await boardProvider.deleteColumn(path: 'board-columns/$columnID');
+  }
+
   Future<void> moveTask({required String taskID, required int toSeq, required String toColumn}) async {
     await boardProvider.moveTask(path: 'tasks/$taskID/move', toSeq: toSeq, toColumn: toColumn);
   }
