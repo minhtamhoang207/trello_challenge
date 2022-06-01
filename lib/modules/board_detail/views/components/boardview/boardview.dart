@@ -310,7 +310,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     // print("topListY:${topListY}");
     // print("bottomListY:${bottomListY}");
     if(boardViewController.hasClients) {
-      WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
+      WidgetsBinding.instance!.addPostFrameCallback((Duration duration) {
         try {
           boardViewController.position.didUpdateScrollPositionBy(0);
         }catch(e){
@@ -610,7 +610,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       if (widget.middleWidget != null) {
         stackWidgets.add(Container(key:_middleWidgetKey,child:widget.middleWidget));
       }
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
         if(mounted){
           setState(() {});
         }

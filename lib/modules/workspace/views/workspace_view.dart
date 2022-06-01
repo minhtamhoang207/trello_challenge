@@ -29,7 +29,7 @@ class WorkspaceView extends GetView<WorkspaceController> {
               actions: [
                 IconButton(
                     onPressed:(){
-                      controller.initCreateProject(name: '', description: '');
+                      controller.initCreateProject(name: '', description: '', type: '');
                       Get.toNamed(Routes.ADD_PROJECT);
                     },
                     icon: const Icon(Icons.add_outlined),
@@ -99,6 +99,17 @@ class WorkspaceView extends GetView<WorkspaceController> {
                                             color: AppColor.darkLiver,
                                             fontWeight: FontWeight.w300,
                                             fontSize: 13
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.only(top: 20),
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                        decoration: BoxDecoration(
+                                          color: Colors.lightBlue.withOpacity(0.3),
+                                          borderRadius: BorderRadius.circular(8)
+                                        ),
+                                        child: Text(
+                                          '${state.data[index].type}'
                                         ),
                                       ),
                                       const Gap(12),
@@ -189,7 +200,7 @@ class WorkspaceView extends GetView<WorkspaceController> {
                                         controller.initCreateProject(
                                             name: state.data[index].name??'',
                                             description: state.data[index].description??'',
-                                            isPrivate: state.data[index].isPrivate,
+                                            type: state.data[index].type??'',
                                             isEdit: true,
                                             projectID: state.data[index].id
                                         );
