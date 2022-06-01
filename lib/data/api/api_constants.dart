@@ -1,3 +1,3 @@
 class ApiConstants {
-  static const baseUrl = 'https://t.itptit.com/api/v1/';
+  static const baseUrl = 'https://chillo.stupd.dev/api/v1/';
 }

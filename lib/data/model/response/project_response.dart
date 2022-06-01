@@ -30,21 +30,21 @@ class ProjectModel {
     required this.id,
     this.name,
     this.description,
-    required this.isPrivate,
+    required this.type,
     required this.members,
   });
 
   String id;
   String? name;
   String? description;
-  bool isPrivate;
+  String? type;
   List<ProjectMember> members;
 
   factory ProjectModel.fromJson(Map<String, dynamic> json) => ProjectModel(
     id: json["_id"],
     name: json["name"]??'',
     description: json["description"]??'',
-    isPrivate: json["is_private"],
+    type: json["type"],
     members: json["members"] != null? List<ProjectMember>.from(json["members"].map((x) => ProjectMember.fromJson(x))):[],
   );
 }

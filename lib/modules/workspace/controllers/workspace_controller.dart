@@ -14,6 +14,7 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
 
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
   RxBool private = RxBool(true);
   RxBool edit = RxBool(false);
   RxString projectId = RxString('');
@@ -61,7 +62,7 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
         await projectRepository.createProject(data: CreateProjectRequest(
             name: nameController.text,
             description: descriptionController.text,
-            private: private.value
+            type: typeController.text
         ));
         CommonWidget.hideLoading();
         Get.back();
@@ -82,7 +83,7 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
         await projectRepository.editProject(projectID: projectId.value, data: CreateProjectRequest(
             name: nameController.text,
             description: descriptionController.text,
-            private: private.value
+            type: typeController.text
         ));
         CommonWidget.hideLoading();
         Get.back();
@@ -99,7 +100,7 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
   void initCreateProject({
     required String name,
     required String description,
-    bool isPrivate = false,
+    required String type,
     bool isEdit = false,
     String projectID = '',
   }){
@@ -107,7 +108,7 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
     projectId.value = projectID;
     nameController.text = name;
     descriptionController.text = description;
-    private.value = isPrivate;
+    typeController.text = type;
   }
 }
 

@@ -1,13 +1,13 @@
 class CreateProjectRequest{
   String name;
   String description;
-  bool private;
+  String type;
 
-  CreateProjectRequest({required this.name, this.description = '', this.private = true});
+  CreateProjectRequest({required this.name, this.description = '', required this.type});
 
   Map<String, dynamic> toJson() => {
     "name": name,
     "description": description,
-    "is_private": private
+    "type": type
   };
 }
