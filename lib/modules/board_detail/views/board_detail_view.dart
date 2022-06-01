@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:trello_challenge/data/model/response/board_column_response.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
@@ -95,10 +96,75 @@ class _BoardViewExampleState extends State<BoardViewExample> {
   //Can be used to animate to different sections of the BoardView
   BoardViewController boardViewController = BoardViewController();
   final controller = Get.find<BoardDetailController>();
+  TextEditingController textController = TextEditingController();
+  final Socket socket = Get.find();
 
 
   @override
   void initState() {
+    connectAndListen();
+  }
+  void connectAndListen() async {
+    try{
+      socket.emit('subscribe', {
+        "type": "Board",
+        // "targetId": controller.arguments.boardID
+        "targetId": '6283cf98b1a3e6f7ae54f5a9'
+      });
+      socket.on('subscribe', (data) => log('>>>>>>>>>>>>>>>>>>>>>>>>>>> subscribe board data: $data'));
+      // log('connect socket status" ${socket.connected}');
+      // log('subscribed to board ${arguments.boardID}');
+      socket.onError((data) => log('SOCKET ERR: $data'));
+      socket.on('create_task', (data) async{
+        log('>>>>>> create_task  ${data.toString()}');
+        await controller.getColumn();
+        setState(() {});
+      });
+      socket.on('create_column', (data) async{
+        log('>>>>>> create_column  ${data.toString()}');
+        await controller.getColumn();
+        setState(() {});
+      });
+      socket.on('move_column', (data) async{
+        log('>>>>>> move_column  ${data.toString()}');
+        await controller.getColumn();
+        setState(() {});
+      });
+      socket.on('update_column', (data) async{
+        log('>>>>>> update_column  ${data.toString()}');
+        await controller.getColumn();
+        setState(() {});
+      });
+      socket.on('delete_column', (data) async{
+        log('>>>>>> delete_column  ${data.toString()}');
+        await controller.getColumn();
+        setState(() {});
+      });
+      socket.on('move_task', (data) async{
+        log('>>>>>> move_task  ${data.toString()}');
+        await controller.getColumn();
+        setState(() {});
+      });
+      socket.on('update_task', (data) async{
+        log('>>>>>> update_task  ${data.toString()}');
+        await controller.getColumn();
+        setState(() {});
+      });
+      socket.on('board_update', (data) async{
+        log('>>>>>> board_update  ${data.toString()}');
+        await controller.getColumn();
+        setState(() {});
+      });
+      // socket.on('create_column', (data) => log('tom oi o day nek ${data.toString()}'));
+      // socket.on('move_column', (data) => log('tom oi o day nek ${data.toString()}'));
+      // socket.on('update_column', (data) => log('tom oi o day nek ${data.toString()}'));
+      // socket.on('delete_column', (data) => log('tom oi o day nek ${data.toString()}'));
+      // socket.on('move_task', (data) => log('tom oi o day nek ${data.toString()}'));
+      // socket.on('update_task', (data) => log('tom oi o day nek ${data.toString()}'));
+      // socket.on('board_update', (data) => log('tom oi o day nek ${data.toString()}'));
+    } catch (e){
+      print(':::::::: ${e.toString()}');
+    }
 
   }
 
@@ -124,22 +190,13 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         //background: widget.background,
         lists: _lists,
         onTapAddList: () {
-          Get.dialog(
-            Column(
-              children: [
-                TextField(),
-                Row(
-                  children: [
-                    TextButton(onPressed: (){}, child: Text('cancel')),
-                    TextButton(onPressed: (){}, child: Text('add'))
-                  ],
-                )
-              ],
-            )
-          );
-          // await controller.addColumn(columnName: 'TomDeyyy', seqNo: controller.listData.length);
-          // await controller.getColumn();
-          // setState(() {});
+          _displayDialog(context, hint: 'Tên cột', title: 'Nhập tên cột', onPress: () async {
+            await controller.addColumn(columnName: textController.text, seqNo: controller.listData.length);
+            Navigator.pop(context);
+            textController.clear();
+            await controller.getColumn();
+            setState(() {});
+          });
         },
         boardViewController: boardViewController,
         bottomPadding: 100,
@@ -154,13 +211,20 @@ class _BoardViewExampleState extends State<BoardViewExample> {
 
         },
         onDropItem: (int? listIndex, int? itemIndex, int? oldListIndex,
-            int? oldItemIndex, BoardItemState? state) {
+            int? oldItemIndex, BoardItemState? state) async {
           //Used to update our local item data
           var item = controller.listData[oldListIndex!].tasks[oldItemIndex!];
           controller.listData[oldListIndex].tasks.removeAt(oldItemIndex);
           controller.listData[listIndex!].tasks.insert(itemIndex!, item);
 
           log('>>>>>> onDropItem: listIndex: $listIndex - itemIndex: $itemIndex - oldListIndex: $oldListIndex');
+
+          await controller.moveTask(
+            toSeq: itemIndex,
+            taskID: controller.listData[listIndex].tasks[itemIndex].id,
+            toColumn: controller.listData[listIndex].id
+          );
+          setState(() {});
 
         },
         onTapItem: (int? listIndex, int? itemIndex, BoardItemState? state) async {
@@ -188,13 +252,17 @@ class _BoardViewExampleState extends State<BoardViewExample> {
       onTapList: (int? listIndex) async {
         log('>>>>>> onTapList: listIndex: $listIndex');
       },
-      onDropList: (int? listIndex, int? oldListIndex) {
+      onDropList: (int? listIndex, int? oldListIndex) async {
         //Update our local list data
         var list = controller.listData[oldListIndex!];
         controller.listData.removeAt(oldListIndex);
         controller.listData.insert(listIndex!, list);
 
         log('>>>>>> onDropList: listIndex: $listIndex - oldIndex: $oldListIndex');
+
+        await controller.moveColumn(columnID: controller.listData[oldListIndex].id, toIndex: listIndex);
+        await controller.getColumn();
+        setState(() {});
       },
       headerBackgroundColor: Colors.deepPurpleAccent,
       backgroundColor: Colors.orangeAccent,
@@ -210,15 +278,19 @@ class _BoardViewExampleState extends State<BoardViewExample> {
       footer: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: InkWell(
-          onTap: () async {
+          onTap: () {
             log('------->>>>> Column index: $index');
-            await controller.addTask(
-                columnID: controller.listData[index].id,
-                seqNo: controller.listData[index].tasks.length,
-                taskName: 'Task ${controller.listData[index].tasks.length}'
-            );
-            await controller.getColumn();
-            setState(() {});
+            _displayDialog(context, hint: 'Tên task', title: 'Nhập tên task', onPress: () async {
+              await controller.addTask(
+                  columnID: controller.listData[index].id,
+                  seqNo: controller.listData[index].tasks.length,
+                  taskName: textController.text
+              );
+              textController.clear();
+              Navigator.pop(context);
+              await controller.getColumn();
+              setState(() {});
+            });
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -231,5 +303,32 @@ class _BoardViewExampleState extends State<BoardViewExample> {
       ),
       items: items,
     );
+  }
+
+  _displayDialog(BuildContext context, {required String title, required String hint, Function()? onPress}) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: TextField(
+              controller: textController,
+              textInputAction: TextInputAction.go,
+              decoration: InputDecoration(hintText: hint),
+            ),
+            actions: <Widget>[
+               TextButton(
+                child:  const Text('Trở lại'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                },
+              ),
+               TextButton(
+                child:  const Text('Xác nhận'),
+                onPressed: onPress
+              )
+            ],
+          );
+        });
   }
 }

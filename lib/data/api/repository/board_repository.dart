@@ -38,4 +38,12 @@ class BoardRepository extends RestClient{
     );
   }
 
+  Future<void> moveColumn({required String columnID, required int toIndex}) async {
+    await boardProvider.moveColumn(path: 'board-columns/$columnID/move', toIndex: toIndex);
+  }
+
+  Future<void> moveTask({required String taskID, required int toSeq, required String toColumn}) async {
+    await boardProvider.moveTask(path: 'tasks/$taskID/move', toSeq: toSeq, toColumn: toColumn);
+  }
+
 }

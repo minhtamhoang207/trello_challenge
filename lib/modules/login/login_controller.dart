@@ -23,9 +23,8 @@ class LoginController extends GetxController {
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
   final SharedPreferences _sharedPreferences = Get.find();
-  // final Socket socket = io('https://t.itptit.com/socket.io', <String, dynamic>{
-  //   "transports": ["websocket"],
-  // });
+  IO.Socket socket = Get.find();
+
 
 
   @override
@@ -36,7 +35,7 @@ class LoginController extends GetxController {
   bool validInformation() {
     if (userNameController.text.trim().isNotEmpty &&
         passwordController.text.trim().isNotEmpty &&
-        userNameController.text.trim().length >= 6 &&
+        userNameController.text.trim().length >= 3 &&
         passwordController.text.trim().length >= 6 &&
         !userNameController.text.trim().contains(' ') &&
         !passwordController.text.trim().contains(' ')) {
@@ -50,10 +49,10 @@ class LoginController extends GetxController {
       CommonWidget.toast('Tên đăng nhập không được để trống');
     } else if (passwordController.text.trim().isEmpty) {
       CommonWidget.toast('Mật khẩu không được để trống');
-    } else if (userNameController.text.trim().length < 6 ||
+    } else if (userNameController.text.trim().length < 3 ||
         userNameController.text.contains(' ')) {
       CommonWidget.toast(
-          'Tên đăng nhập phải chứa ít nhất 6 kí tự và không chứa khoảng trắng');
+          'Tên đăng nhập phải chứa ít nhất 3 kí tự và không chứa khoảng trắng');
     } else if (passwordController.text.trim().length < 6 ||
         passwordController.text.contains(' ')) {
       CommonWidget.toast(
@@ -110,55 +109,20 @@ class LoginController extends GetxController {
     }
   }
 
-  // void connectToServer() {
-  //   try {
-  //     socket.connect();
-  //     print('login connect ${socket.connected}');
-  //     socket.onError((data) => log('SOCKET ERR: $data'));
-  //     // socket.on('connect', (_) => print('connect: ${socket.id}'));
-  //   } catch (e) {
-  //     log(e.toString());
-  //   }
-  // }
-
-  connectAndListen({required String token}) async {
+  connectAndListen({required String token}) {
     try{
-      IO.Socket socket = IO.io("https://t.itptit.com/socket.io", <String, dynamic>{
-        "transports": ["websocket"],
+      socket.emit('login', {
+        "accessToken": token
       });
-
-      socket.onConnect((_) {
-        print('connect login socket');
-        socket.emit('login', {
-          "accessToken": token
-        });
-        socket.on('login', (data) => log('login socket data : $data'));
-        log('connect socket status--- ${socket.connected}');
+      socket.on('login', (data) => log('login socket data : $data'));
+      socket.onError((err){
+        log('LOGIN SOCKET ERR: $err');
+        throw err;
       });
-      await Future.delayed(const Duration(seconds: 5)).then((value){
-        socket.emit('subscribe', {
-          "type": "Board",
-          "targetId": '627c7d95ea93db1273af79d3'
-        });
-        socket.on('subscribe', (data) => log('subscribe board data: $data'));
-      });
-      socket.onError((data) => log('LOGIN SOCKET ERR: $data'));
     } catch (e){
-      print(e.toString());
+      CommonWidget.toast(e.toString());
     }
-
   }
-
-  // loginSocket(Map<String, dynamic> data) async {
-  //   try{
-  //     socket.emit('login', data);
-  //     socket.onError((data) => log('LOGIN SOCKET ERR: $data'));
-  //     log('hey Tompeipei: ${socket.connected}');
-  //     log('logged in to socket');
-  //   } catch (e){
-  //     log(e.toString());
-  //   }
-  // }
 
   @override
   void dispose() {

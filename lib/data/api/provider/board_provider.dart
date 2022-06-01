@@ -37,4 +37,17 @@ class BoardProvider {
       "column": columnID
     });
   }
+
+  Future<Response> moveColumn({required String path, required int toIndex}) {
+    return restClient.request(url: path, method: Method.PUT, params: {
+      "to": toIndex
+    });
+  }
+
+  Future<Response> moveTask({required String path, required int toSeq, required String toColumn}) {
+    return restClient.request(url: path, method: Method.PUT, params: {
+      "toColumn": toColumn,
+      "toSeq": toSeq
+    });
+  }
 }

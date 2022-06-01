@@ -16,20 +16,25 @@ class BoardDetailController extends GetxController {
   final BoardRepository boardRepository;
   BoardDetailController({required this.projectRepository, required this.boardRepository});
   final BoardDetailParams arguments = Get.arguments;
-  // final Socket socket = io('https://t.itptit.com/socket.io', <String, dynamic>{});
+  IO.Socket socket = Get.find();
 
 
   @override
   void onInit() async {
-    connectAndListen();
-    await boardRepository.getBoardColumn(boardID: arguments.boardID);
+   // await boardRepository.getBoardColumn(boardID: arguments.boardID);
+   //  await boardRepository.getBoardColumn(boardID: '6283cf98b1a3e6f7ae54f5a9');
     super.onInit();
   }
 
   List<BoardListObject> listData = [];
 
   Future<void> getColumn() async {
-    final res = await boardRepository.getBoardColumn(boardID: arguments.boardID);
+    // final res = await boardRepository.getBoardColumn(boardID: arguments.boardID);
+    final res = await boardRepository.getBoardColumn(boardID: '6283cf98b1a3e6f7ae54f5a9');
+    for(int i = 0; i < res.data.length; i ++){
+      res.data[i].tasks.sort((a, b) => a.seqNo.compareTo(b.seqNo));
+    }
+    //someObjects.sort((a, b) => a.someProperty.compareTo(b.someProperty));
     listData = res.data;
   }
 
@@ -61,6 +66,26 @@ class BoardDetailController extends GetxController {
     }
   }
 
+  Future<void> moveColumn({required String columnID, required int toIndex}) async{
+    CommonWidget.showLoading();
+    try {
+      await boardRepository.moveColumn(columnID: columnID, toIndex: toIndex);
+      CommonWidget.hideLoading();
+    } catch (e) {
+      CommonWidget.hideLoading();
+    }
+  }
+
+  Future<void> moveTask({required String taskID, required int toSeq, required String toColumn}) async{
+    CommonWidget.showLoading();
+    try {
+      await boardRepository.moveTask(taskID: taskID, toSeq: toSeq, toColumn: toColumn);
+      CommonWidget.hideLoading();
+    } catch (e) {
+      CommonWidget.hideLoading();
+    }
+  }
+
   // void subscribeToBoard() {
   //   try {
   //     socket.connect();
@@ -85,37 +110,6 @@ class BoardDetailController extends GetxController {
   //     log(e.toString());
   //   }
   // }
-
-  void connectAndListen() async {
-    try{
-      IO.Socket socket = IO.io("https://t.itptit.com/socket.io", <String, dynamic>{
-        "transports": ["websocket"],
-      });
-
-      socket.onConnect((_) {
-        print('connect hehe');
-        socket.emit('subscribe', {
-          "type": "Board",
-          "targetId": arguments.boardID
-        });
-        socket.on('subscribe', (data) => log('subscribe board data: $data'));
-        log('connect socket status" ${socket.connected}');
-        log('subscribed to board ${arguments.boardID}');
-      });
-      socket.onError((data) => log('SOCKET ERR: $data'));
-      socket.on('create_task', (data) => log('tom oi o day nek ${data.toString()}'));
-      socket.on('create_column', (data) => log('tom oi o day nek ${data.toString()}'));
-      socket.on('move_column', (data) => log('tom oi o day nek ${data.toString()}'));
-      socket.on('update_column', (data) => log('tom oi o day nek ${data.toString()}'));
-      socket.on('delete_column', (data) => log('tom oi o day nek ${data.toString()}'));
-      socket.on('move_task', (data) => log('tom oi o day nek ${data.toString()}'));
-      socket.on('update_task', (data) => log('tom oi o day nek ${data.toString()}'));
-      socket.on('board_update', (data) => log('tom oi o day nek ${data.toString()}'));
-    } catch (e){
-      print('huhuhu hihi: ${e.toString()}');
-    }
-
-  }
 
   @override
   void onClose() {}
