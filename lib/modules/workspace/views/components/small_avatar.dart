@@ -10,11 +10,11 @@ class SmallAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Transform(
-      transform: Matrix4.translationValues(index * -5, 0, 0),
+      transform: Matrix4.translationValues( 0, 0, 0),
       child: CachedNetworkImage(
         imageUrl: imgURL,
         errorWidget: (context, url, error) =>  Transform(
-          transform: Matrix4.translationValues(index * -5, 0, 0),
+          transform: Matrix4.translationValues(0, 0, 0),
           child: Icon(
               CupertinoIcons.person_circle_fill,
               size: 25,
@@ -22,7 +22,7 @@ class SmallAvatar extends StatelessWidget {
         ),
         placeholder: (context, url) =>
             Transform(
-              transform: Matrix4.translationValues(index * -5, 0, 0),
+              transform: Matrix4.translationValues( 0, 0, 0),
               child: Icon(
                   CupertinoIcons.person_circle_fill,
                   size: 25,

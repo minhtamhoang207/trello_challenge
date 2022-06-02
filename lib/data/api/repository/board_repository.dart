@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:trello_challenge/data/api/provider/board_provider.dart';
+import 'package:trello_challenge/data/model/request/update_task_request.dart';
 import 'package:trello_challenge/data/model/response/board_column_response.dart';
 import '../base_provider.dart';
 
@@ -51,6 +52,10 @@ class BoardRepository extends RestClient{
 
   Future<void> deleteTaskImage({required String taskID}) async {
     await boardProvider.deleteTaskImage(path: 'tasks/$taskID/image');
+  }
+
+  Future<void> updateTask({required String taskID, required UpdateTaskRequest updateTaskRequest}) async {
+    await boardProvider.updateTask(path: 'tasks/$taskID', updateTaskRequest: updateTaskRequest);
   }
 
   Future<void> moveColumn({required String columnID, required int toIndex}) async {

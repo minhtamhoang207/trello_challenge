@@ -3,10 +3,12 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:trello_challenge/data/model/request/update_task_request.dart';
 import 'package:trello_challenge/data/model/response/board_column_response.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
@@ -97,6 +99,9 @@ class _BoardViewExampleState extends State<BoardViewExample> {
   BoardViewController boardViewController = BoardViewController();
   final controller = Get.find<BoardDetailController>();
   TextEditingController textController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController taskNameController = TextEditingController();
+
   final Socket socket = Get.find();
 
 
@@ -221,10 +226,14 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         },
         onTapItem: (int? listIndex, int? itemIndex, BoardItemState? state) async {
           log('>>>>>> onTapItem: listIndex: $listIndex - itemIndex: $itemIndex');
+          descriptionController.text = itemObject.description;
+          taskNameController.text = itemObject.name;
+          print('item des: ${itemObject.description}');
           _displayBottomSheet(context, 
             img: itemObject.image, 
             taskName: itemObject.name,
             taskID: itemObject.id,
+            task: itemObject,
             onPressed: () async {
               await controller.deleteTask(taskID: itemObject.id);
             },
@@ -233,6 +242,17 @@ class _BoardViewExampleState extends State<BoardViewExample> {
             },
             onPressedDeleteImage: () async {
               await controller.deleteTaskImage(taskID: itemObject.id);
+            },
+            onPressedSave: () async {
+              await controller.updateTask(taskID: itemObject.id,
+                  updateTaskRequest: UpdateTaskRequest(
+                      taskName: taskNameController.text.isNotEmpty? taskNameController.text:null,
+                      columnID: controller.listData[listIndex!].id,
+                      seqNo: itemIndex!,
+                      description: descriptionController.text.isNotEmpty?descriptionController.text:null
+                  ));
+              descriptionController.clear();
+              taskNameController.clear();
             }
           );
         },
@@ -241,13 +261,15 @@ class _BoardViewExampleState extends State<BoardViewExample> {
             padding: const EdgeInsets.all(10),
             child: ListView(
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               children: [
                 Visibility(
                   visible: itemObject.image.isNotEmpty,
                   child: AspectRatio(
                     aspectRatio: 16/9,
                     child: Image.network(
-                      itemObject.image
+                      itemObject.image,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -271,6 +293,8 @@ class _BoardViewExampleState extends State<BoardViewExample> {
       },
       onTapList: (int? listIndex) async {
         log('>>>>>> onTapList: listIndex: $listIndex');
+        log('>>>>>> onTapList: columnID: ${controller.listData[listIndex!].id}');
+
       },
       onDropList: (int? listIndex, int? oldListIndex) async {
         //Update our local list data
@@ -279,8 +303,11 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         controller.listData.insert(listIndex!, list);
 
         log('>>>>>> onDropList: listIndex: $listIndex - oldIndex: $oldListIndex');
-
-        await controller.moveColumn(columnID: controller.listData[oldListIndex].id, toIndex: listIndex);
+        log('>>>>>>>>>>> onDropList: ${controller.listData[listIndex].id}');
+        await controller.moveColumn(
+            columnID: controller.listData[listIndex].id,
+            toIndex: listIndex
+        );
         await controller.getColumn();
         setState(() {});
       },
@@ -390,7 +417,8 @@ class _BoardViewExampleState extends State<BoardViewExample> {
     );
   }
 
-  _displayDialog(BuildContext context, {required String title, required String hint, Function()? onPress}) async {
+  _displayDialog(BuildContext context, {
+    required String title, required String hint, Function()? onPress}) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -424,7 +452,8 @@ class _BoardViewExampleState extends State<BoardViewExample> {
     Function()? onPressed,
     Function()? onPressedImage,
     Function()? onPressedDeleteImage,
-
+    Function()? onPressedSave,
+    required Task task
   }){
     showModalBottomSheet(
       context: context,
@@ -437,71 +466,144 @@ class _BoardViewExampleState extends State<BoardViewExample> {
           minChildSize: 0.2,
           maxChildSize: 0.8,
           builder: (_, controller) {
-            return Container(
-              color: Colors.white,
-              child: ListView(
-                padding: const EdgeInsets.all(20),
-                children: [
-                  AspectRatio(
-                    aspectRatio: 2/0.8,
-                    child: img.isNotEmpty?
-                    InkWell(
-                      onTap: onPressedImage,
-                      child: Image.network(img)):
-                    InkWell(
-                      onTap: onPressedImage,
-                      child: Container(
-                        color: Colors.grey.withOpacity(0.6),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                          Icon(Icons.image),
-                          Gap(10),
-                          Text('Thêm ảnh')
-                        ]),
-                      ),
-                    )
-                  ),
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     const Spacer(),
-                  //     ElevatedButton(
-                  //         onPressed: () {},
-                  //         child: Row(mainAxisSize: MainAxisSize.min, children: const [
-                  //            Icon(CupertinoIcons.delete, size: 15),
-                  //            Gap(10),
-                  //            Text('Xóa thẻ'),
-                  //         ]))
-                  //   ],
-                  // ),
-                const Gap(15),
-                Visibility(
-                  visible: img.isNotEmpty,
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: onPressedDeleteImage, 
-                        child: Row(children: const [
-                          Icon(Icons.delete, size: 15),
-                          Gap(10),
-                          Text('Xóa ảnh', style: TextStyle(
-                            fontSize: 12
-                          ))
-                        ])
+            return KeyboardDismissOnTap(
+              child: Container(
+                color: Colors.white,
+                child: ListView(
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 2/0.8,
+                      child: img.isNotEmpty?
+                      InkWell(
+                        onTap: onPressedImage,
+                        child: Image.network(img, fit: BoxFit.cover)):
+                      InkWell(
+                        onTap: onPressedImage,
+                        child: Container(
+                          color: Colors.grey.withOpacity(0.6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                            Icon(Icons.image),
+                            Gap(10),
+                            Text('Thêm ảnh')
+                          ]),
+                        ),
                       )
-                    ],
-                  ),
-                ),
-                Text(
-                    taskName,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
                     ),
-                  )
-                ],
+                    const Gap(15),
+                    Visibility(
+                      visible: img.isNotEmpty,
+                      child: Row(
+                        children: [
+                          const Spacer(),
+                          ElevatedButton(
+                            onPressed: onPressedDeleteImage,
+                            child: Row(children: const [
+                              Icon(Icons.delete, size: 15),
+                              Gap(10),
+                              Text('Xóa ảnh', style: TextStyle(
+                                fontSize: 12
+                              ))
+                            ])
+                          )
+                        ],
+                      ),
+                    ),
+                    const Gap(15),
+                    Text(
+                        taskName,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    const Divider(thickness: 2),
+                    const Gap(15),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: const [
+                        Icon(Icons.sort, size: 15),
+                        Gap(10),
+                        Text(
+                          'Tên thẻ',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(10),
+                    TextFormField(
+                      controller: taskNameController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        border:OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    const Gap(25),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: const [
+                        Icon(Icons.speaker_notes_outlined, size: 15),
+                        Gap(10),
+                        Text(
+                          'Mô tả về thẻ',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(10),
+                    TextFormField(
+                      maxLines: 3,
+                      controller: textController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        border:OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    const Gap(10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Spacer(),
+                        ElevatedButton(
+                            onPressed: onPressed,
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(Colors.red)
+                            ),
+                            child: Row(children: const [
+                              Icon(Icons.delete, size: 15),
+                              Gap(10),
+                              Text('Xóa thẻ', style: TextStyle(
+                                  fontSize: 12
+                              ))
+                            ])
+                        ),
+                        const Gap(20),
+                        ElevatedButton(
+                            onPressed: onPressedSave,
+                            child: Row(mainAxisSize: MainAxisSize.min, children: const [
+                               Icon(Icons.save, size: 15),
+                               Gap(10),
+                               Text('Lưu'),
+                            ]))
+                      ],
+                    ),
+
+                  ],
+                ),
               ),
             );
           },

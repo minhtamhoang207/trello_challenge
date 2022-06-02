@@ -181,18 +181,18 @@ class ProfileScreen extends GetView<ProfileController> {
                         });
                       },
                     ),
-                    ProfileButton(
-                      leadingIcon: Icon(CupertinoIcons.square_list, color: AppColor.appBlue),
-                      title: 'Công việc của tôi',
-                      showRightArrow: true,
-                      onPressed: () {},
-                    ),
-                    ProfileButton(
-                      leadingIcon: const Icon(CupertinoIcons.list_bullet, color: Colors.deepOrange),
-                      title: 'Hoạt động',
-                      showRightArrow: true,
-                      onPressed: () {},
-                    ),
+                    // ProfileButton(
+                    //   leadingIcon: Icon(CupertinoIcons.square_list, color: AppColor.appBlue),
+                    //   title: 'Công việc của tôi',
+                    //   showRightArrow: true,
+                    //   onPressed: () {},
+                    // ),
+                    // ProfileButton(
+                    //   leadingIcon: const Icon(CupertinoIcons.list_bullet, color: Colors.deepOrange),
+                    //   title: 'Hoạt động',
+                    //   showRightArrow: true,
+                    //   onPressed: () {},
+                    // ),
                     ProfileButton(
                         leadingIcon: const Icon(CupertinoIcons.lock_rotation, color: Colors.blue,),
                         title: 'Đổi mật khẩu',

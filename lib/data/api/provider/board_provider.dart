@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:trello_challenge/data/model/request/create_board_request.dart';
 import 'package:trello_challenge/data/model/request/create_project_request.dart';
+import 'package:trello_challenge/data/model/request/update_task_request.dart';
 import '../base_provider.dart';
 
 class BoardProvider {
@@ -48,6 +49,14 @@ class BoardProvider {
 
   Future<Response> deleteTaskImage({required String path}){
     return restClient.request(url: path, method: Method.DELETE);
+  }
+
+  Future<Response> updateTask({required String path, required UpdateTaskRequest updateTaskRequest}){
+    print('>>>>>>>>>>>>>>>>>>>');
+    print(updateTaskRequest.toJson().toString());
+    print('>>>>>>>>>>>>>>>>>>>');
+
+    return restClient.request(url: path, method: Method.PUT, params: updateTaskRequest.toJson());
   }
 
   Future<Response> moveColumn({required String path, required int toIndex}) {

@@ -41,7 +41,7 @@ class HomePage extends GetView<HomeController>{
         ],
       ),
       onItemSelected: (index){
-        if(index == 3){
+        if(index == 1){
           Get.find<ProfileController>().loadUser();
         }
       },
@@ -63,8 +63,6 @@ class HomePage extends GetView<HomeController>{
   List<Widget> _buildScreens() {
     return [
       const WorkspaceView(),
-      Container(color: Colors.pink),
-      Container(color: Colors.amberAccent),
       const ProfileScreen(),
     ];
   }
@@ -76,16 +74,16 @@ class HomePage extends GetView<HomeController>{
         activeColorPrimary: AppColor.appBlue,
         inactiveColorPrimary: Colors.grey,
       ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.today),
-        activeColorPrimary: AppColor.appBlue,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.bell),
-        activeColorPrimary: AppColor.appBlue,
-        inactiveColorPrimary: Colors.grey,
-      ),
+      // PersistentBottomNavBarItem(
+      //   icon: const Icon(CupertinoIcons.today),
+      //   activeColorPrimary: AppColor.appBlue,
+      //   inactiveColorPrimary: Colors.grey,
+      // ),
+      // PersistentBottomNavBarItem(
+      //   icon: const Icon(CupertinoIcons.bell),
+      //   activeColorPrimary: AppColor.appBlue,
+      //   inactiveColorPrimary: Colors.grey,
+      // ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.profile_circled),
         activeColorPrimary: AppColor.appBlue,

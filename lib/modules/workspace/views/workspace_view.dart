@@ -116,7 +116,7 @@ class WorkspaceView extends GetView<WorkspaceController> {
                                         child: ListView(
                                             scrollDirection: Axis.horizontal,
                                             children: List.generate(state.data[index].members.length, (i) =>
-                                            SmallAvatar(index: i, imgURL: state.data[index].members[0].user.avatar??'')
+                                            SmallAvatar(index: i, imgURL: state.data[index].members[i].user.avatar??'')
                                           )
                                         ),
                                       ),
