@@ -42,6 +42,14 @@ class BoardProvider {
     return restClient.request(url: path, method: Method.DELETE);
   }
 
+  Future<Response> updateTaskImage({required String path, required FormData formData}){
+    return restClient.request(url: path, method: Method.PUT, params: formData);
+  }
+
+  Future<Response> deleteTaskImage({required String path}){
+    return restClient.request(url: path, method: Method.DELETE);
+  }
+
   Future<Response> moveColumn({required String path, required int toIndex}) {
     return restClient.request(url: path, method: Method.PUT, params: {
       "to": toIndex

@@ -114,36 +114,7 @@ class WorkspaceView extends GetView<WorkspaceController> {
                                       ),
                                       const Gap(12),
                                       Wrap(
-                                          children: List.generate(3, (i) =>
-                                          i == 0?
-                                          Transform(
-                                            transform: Matrix4.translationValues(0, 0, 0),
-                                            child: CachedNetworkImage(
-                                              imageUrl: state.data[index].members[0].user.avatar??'',
-                                              errorWidget: (context, url, error) => Icon(
-                                                  CupertinoIcons.person_circle_fill,
-                                                  size: 25,
-                                                  color: AppColor.darkGray),
-                                              placeholder: (context, url) => Icon(
-                                                  CupertinoIcons.person_circle_fill,
-                                                  size: 25,
-                                                  color: AppColor.darkGray),
-                                              imageBuilder: (context, imageProvider) => SizedBox(
-                                                  height: 25,
-                                                  width: 25,
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(color: AppColor.white, width: 2),
-                                                        shape: BoxShape.circle,
-                                                        image: DecorationImage(
-                                                            fit: BoxFit.fill,
-                                                            image: imageProvider
-                                                        )
-                                                    ),
-                                                  )
-                                              ),
-                                            ),
-                                          ):
+                                          children: List.generate(state.data[index].members.length, (i) =>
                                           Transform(
                                             transform: Matrix4.translationValues(i * -5, 0, 0),
                                             child: CachedNetworkImage(
@@ -179,7 +150,7 @@ class WorkspaceView extends GetView<WorkspaceController> {
                                               ),
                                             ),
                                           ),
-                                          )
+                                        )
                                       ),
                                     ],
                                   ),

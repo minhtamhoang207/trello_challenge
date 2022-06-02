@@ -50,11 +50,6 @@ class BoardDetailView extends GetView<BoardDetailController> {
         child: ListView(
           children: [
             ListTile(
-              onTap: (){},
-              leading: const Icon(Icons.image),
-              title: const Text('Chỉnh sửa hình nền')
-            ),
-            ListTile(
                 onTap: () async {
                   Get.back();
                   await Get.toNamed(Routes.CREATE_BOARD, arguments: BoardDetailParams(
@@ -74,11 +69,11 @@ class BoardDetailView extends GetView<BoardDetailController> {
               leading: const Icon(Icons.delete),
               title: const Text('Xóa bảng'),
             ),
-            ListTile(
-              onTap: (){},
-              leading: const Icon(Icons.info_outline),
-              title: const Text('Thông tin bảng'),
-            )
+            // ListTile(
+            //   onTap: (){},
+            //   leading: const Icon(Icons.info_outline),
+            //   title: const Text('Thông tin bảng'),
+            // )
           ],
         ),
       ),
@@ -232,6 +227,12 @@ class _BoardViewExampleState extends State<BoardViewExample> {
             taskID: itemObject.id,
             onPressed: () async {
               await controller.deleteTask(taskID: itemObject.id);
+            },
+            onPressedImage: () async {
+              await controller.updateTaskImage(taskID: itemObject.id);
+            },
+            onPressedDeleteImage: () async {
+              await controller.deleteTaskImage(taskID: itemObject.id);
             }
           );
         },
@@ -420,7 +421,10 @@ class _BoardViewExampleState extends State<BoardViewExample> {
     required String img,
     required String taskName,
     required String taskID,
-    Function()? onPressed
+    Function()? onPressed,
+    Function()? onPressedImage,
+    Function()? onPressedDeleteImage,
+
   }){
     showModalBottomSheet(
       context: context,
@@ -436,18 +440,66 @@ class _BoardViewExampleState extends State<BoardViewExample> {
             return Container(
               color: Colors.white,
               child: ListView(
+                padding: const EdgeInsets.all(20),
                 children: [
-                  Visibility(
-                    visible: img.isNotEmpty,
-                    child: AspectRatio(
-                      aspectRatio: 16/9,
-                      child: Image.network(img),
-                    ),
+                  AspectRatio(
+                    aspectRatio: 2/0.8,
+                    child: img.isNotEmpty?
+                    InkWell(
+                      onTap: onPressedImage,
+                      child: Image.network(img)):
+                    InkWell(
+                      onTap: onPressedImage,
+                      child: Container(
+                        color: Colors.grey.withOpacity(0.6),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                          Icon(Icons.image),
+                          Gap(10),
+                          Text('Thêm ảnh')
+                        ]),
+                      ),
+                    )
                   ),
-                  Text(taskName),
-                  IconButton(
-                    onPressed: onPressed,
-                    icon: const Icon(CupertinoIcons.delete)
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     const Spacer(),
+                  //     ElevatedButton(
+                  //         onPressed: () {},
+                  //         child: Row(mainAxisSize: MainAxisSize.min, children: const [
+                  //            Icon(CupertinoIcons.delete, size: 15),
+                  //            Gap(10),
+                  //            Text('Xóa thẻ'),
+                  //         ]))
+                  //   ],
+                  // ),
+                const Gap(15),
+                Visibility(
+                  visible: img.isNotEmpty,
+                  child: Row(
+                    children: [
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: onPressedDeleteImage, 
+                        child: Row(children: const [
+                          Icon(Icons.delete, size: 15),
+                          Gap(10),
+                          Text('Xóa ảnh', style: TextStyle(
+                            fontSize: 12
+                          ))
+                        ])
+                      )
+                    ],
+                  ),
+                ),
+                Text(
+                    taskName,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    ),
                   )
                 ],
               ),

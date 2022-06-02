@@ -1,19 +1,24 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:trello_challenge/data/api/repository/board_repository.dart';
 import 'package:trello_challenge/data/model/params/board_detail_params.dart';
 import 'package:trello_challenge/data/model/response/board_column_response.dart';
+import 'package:trello_challenge/shared/enums/dialog_type.dart';
 
 import '../../../data/api/repository/project_repository.dart';
 import '../../../shared/utils/common_widget.dart';
+import '../../../shared/widgets/custom_dialog.dart';
 import '../../project_detail/controllers/project_detail_controller.dart';
 
 class BoardDetailController extends GetxController {
 
   final ProjectRepository projectRepository;
   final BoardRepository boardRepository;
+  final ImagePicker _imagePicker = ImagePicker();
+
   BoardDetailController({required this.projectRepository, required this.boardRepository});
   final BoardDetailParams arguments = Get.arguments;
   IO.Socket socket = Get.find();
@@ -87,6 +92,34 @@ class BoardDetailController extends GetxController {
       CommonWidget.hideLoading();
     }
   }
+
+  Future<void> updateTaskImage({required String taskID}) async {
+    final XFile? image = await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      CommonWidget.showLoading();
+      try {
+        await boardRepository.updateTaskImage(file: image, taskID: taskID);
+        CommonWidget.hideLoading();
+        Get.back();
+      } catch (e) {
+        CommonWidget.hideLoading();
+        Get.dialog(CustomDialog(dialogType: DialogType.failed, message: e.toString()));
+      }
+    }
+  }
+
+  Future<void> deleteTaskImage({required String taskID}) async {
+    CommonWidget.showLoading();
+      try {
+        await boardRepository.deleteTaskImage(taskID: taskID);
+        CommonWidget.hideLoading();
+        Get.back();
+      } catch (e) {
+        CommonWidget.hideLoading();
+        Get.dialog(CustomDialog(dialogType: DialogType.failed, message: e.toString()));
+      }
+  }
+
 
   void deleteBoard() async {
     CommonWidget.showLoading();

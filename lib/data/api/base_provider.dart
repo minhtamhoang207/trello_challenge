@@ -84,8 +84,10 @@ class RestClient extends GetxService {
           throw '404 NOT FOUND';
         } else if (e.response!.statusCode! >= 500){
           throw 'Server error';
+        } else if (e.response!.statusCode == 413){
+          throw 'File too large';
         }
-      }
+      } 
       if (e.type == DioErrorType.other) {
         log(e.toString());
         throw 'Vui lòng kiểm tra lại kết nối mạng';

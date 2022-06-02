@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:trello_challenge/data/api/provider/board_provider.dart';
 import 'package:trello_challenge/data/model/response/board_column_response.dart';
 import '../base_provider.dart';
@@ -40,6 +42,15 @@ class BoardRepository extends RestClient{
 
   Future<void> deleteTask({required String taskID}) async {
     await boardProvider.deleteTask(path: 'tasks/$taskID');
+  }
+
+  Future<void> updateTaskImage({required XFile file, required String taskID}) async {
+    var formData = FormData.fromMap({'file': await MultipartFile.fromFile(file.path)});
+    await boardProvider.updateTaskImage(path: 'tasks/$taskID/image', formData: formData);
+  }
+
+  Future<void> deleteTaskImage({required String taskID}) async {
+    await boardProvider.deleteTaskImage(path: 'tasks/$taskID/image');
   }
 
   Future<void> moveColumn({required String columnID, required int toIndex}) async {
