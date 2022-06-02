@@ -1,16 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:trello_challenge/data/model/params/project_detail_params.dart';
+import 'package:trello_challenge/modules/workspace/views/components/small_avatar.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/widgets/empty_list.dart';
-
 import '../../../gen/assets.gen.dart';
 import '../../../shared/constants/colors.dart';
 import '../controllers/workspace_controller.dart';
@@ -113,44 +111,14 @@ class WorkspaceView extends GetView<WorkspaceController> {
                                         ),
                                       ),
                                       const Gap(12),
-                                      Wrap(
-                                          children: List.generate(state.data[index].members.length, (i) =>
-                                          Transform(
-                                            transform: Matrix4.translationValues(i * -5, 0, 0),
-                                            child: CachedNetworkImage(
-                                              imageUrl: state.data[index].members[0].user.avatar??'',
-                                              errorWidget: (context, url, error) =>  Transform(
-                                                transform: Matrix4.translationValues(i * -5, 0, 0),
-                                                child: Icon(
-                                                    CupertinoIcons.person_circle_fill,
-                                                    size: 25,
-                                                    color: AppColor.darkGray),
-                                              ),
-                                              placeholder: (context, url) =>
-                                                  Transform(
-                                                    transform: Matrix4.translationValues(i * -5, 0, 0),
-                                                    child: Icon(
-                                                        CupertinoIcons.person_circle_fill,
-                                                        size: 25,
-                                                        color: AppColor.darkGray),
-                                                  ),
-                                              imageBuilder: (context, imageProvider) => SizedBox(
-                                                  height: 25,
-                                                  width: 25,
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(color: AppColor.white, width: 2),
-                                                        shape: BoxShape.circle,
-                                                        image: DecorationImage(
-                                                            fit: BoxFit.fill,
-                                                            image: imageProvider
-                                                        )
-                                                    ),
-                                                  )
-                                              ),
-                                            ),
-                                          ),
-                                        )
+                                      SizedBox(
+                                        height: 25,
+                                        child: ListView(
+                                            scrollDirection: Axis.horizontal,
+                                            children: List.generate(state.data[index].members.length, (i) =>
+                                            SmallAvatar(index: i, imgURL: state.data[index].members[0].user.avatar??'')
+                                          )
+                                        ),
                                       ),
                                     ],
                                   ),
