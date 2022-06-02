@@ -38,6 +38,10 @@ class BoardRepository extends RestClient{
     );
   }
 
+  Future<void> deleteTask({required String taskID}) async {
+    await boardProvider.deleteTask(path: 'tasks/$taskID');
+  }
+
   Future<void> moveColumn({required String columnID, required int toIndex}) async {
     await boardProvider.moveColumn(path: 'board-columns/$columnID/move', toIndex: toIndex);
   }

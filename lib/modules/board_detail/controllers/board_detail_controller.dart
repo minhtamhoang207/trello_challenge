@@ -76,6 +76,18 @@ class BoardDetailController extends GetxController {
     );
   }
 
+  Future<void> deleteTask({required String taskID}) async {
+    CommonWidget.showLoading();
+    try {
+      await boardRepository.deleteTask(taskID: taskID);
+      CommonWidget.hideLoading();
+      Get.back();
+      Get.find<ProjectDetailController>().getBoards();
+    } catch (e) {
+      CommonWidget.hideLoading();
+    }
+  }
+
   void deleteBoard() async {
     CommonWidget.showLoading();
     try {

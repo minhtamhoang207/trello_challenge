@@ -38,6 +38,10 @@ class BoardProvider {
     });
   }
 
+  Future<Response> deleteTask({required String path}){
+    return restClient.request(url: path, method: Method.DELETE);
+  }
+
   Future<Response> moveColumn({required String path, required int toIndex}) {
     return restClient.request(url: path, method: Method.PUT, params: {
       "to": toIndex

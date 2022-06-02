@@ -226,14 +226,37 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         },
         onTapItem: (int? listIndex, int? itemIndex, BoardItemState? state) async {
           log('>>>>>> onTapItem: listIndex: $listIndex - itemIndex: $itemIndex');
-          _displayBottomSheet(context);
+          _displayBottomSheet(context, 
+            img: itemObject.image, 
+            taskName: itemObject.name,
+            taskID: itemObject.id,
+            onPressed: () async {
+              await controller.deleteTask(taskID: itemObject.id);
+            }
+          );
         },
         item: Card(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(itemObject.name),
+            padding: const EdgeInsets.all(10),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                Visibility(
+                  visible: itemObject.image.isNotEmpty,
+                  child: AspectRatio(
+                    aspectRatio: 16/9,
+                    child: Image.network(
+                      itemObject.image
+                    ),
+                  ),
+                ),
+                Gap(itemObject.image.isNotEmpty?10:0),
+                Text(itemObject.name),
+              ],
+            ),
           ),
-        ));
+        )
+    );
   }
 
   Widget _createBoardList(BoardListObject list, int index) {
@@ -393,7 +416,12 @@ class _BoardViewExampleState extends State<BoardViewExample> {
         });
   }
 
-  _displayBottomSheet(BuildContext context){
+  _displayBottomSheet(BuildContext context, {
+    required String img,
+    required String taskName,
+    required String taskID,
+    Function()? onPressed
+  }){
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -405,7 +433,25 @@ class _BoardViewExampleState extends State<BoardViewExample> {
           minChildSize: 0.2,
           maxChildSize: 0.8,
           builder: (_, controller) {
-            return Container(color: Colors.red);
+            return Container(
+              color: Colors.white,
+              child: ListView(
+                children: [
+                  Visibility(
+                    visible: img.isNotEmpty,
+                    child: AspectRatio(
+                      aspectRatio: 16/9,
+                      child: Image.network(img),
+                    ),
+                  ),
+                  Text(taskName),
+                  IconButton(
+                    onPressed: onPressed,
+                    icon: const Icon(CupertinoIcons.delete)
+                  )
+                ],
+              ),
+            );
           },
         );
       },
