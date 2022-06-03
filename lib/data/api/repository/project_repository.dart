@@ -26,6 +26,14 @@ class ProjectRepository extends RestClient{
     return projectProvider.deleteProject(path: 'projects/$projectID');
   }
 
+  Future<void> joinProject({required String projectID, required String inviteCode}) {
+    return projectProvider.joinProject(path: 'projects/$projectID/join', inviteCode: inviteCode);
+  }
+
+  Future<void> leaveProject({required String projectID}) {
+    return projectProvider.leaveProject(path: 'projects/$projectID/leave');
+  }
+
   Future<BoardResponse> getBoards({required String projectID}) async {
     final res = await projectProvider.getBoards(path: 'boards', projectID: projectID);
     return BoardResponse.fromJson(res.data);

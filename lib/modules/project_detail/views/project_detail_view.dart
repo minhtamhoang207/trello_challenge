@@ -32,6 +32,13 @@ class ProjectDetailView extends GetView<ProjectDetailController> {
                   icon: const Icon(Icons.add_outlined),
                   tooltip: 'Thêm bảng mới',
                 ),
+                IconButton(
+                  onPressed:(){
+                    controller.leaveProject();
+                  },
+                  icon: const Icon(Icons.logout),
+                  tooltip: 'Rời dự án',
+                ),
               ],
             ),
             body: controller.obx(

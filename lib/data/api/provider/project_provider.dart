@@ -27,6 +27,16 @@ class ProjectProvider {
     return restClient.request(url: path, method: Method.DELETE);
   }
 
+  Future<Response> joinProject({required String path, required String inviteCode}) {
+    return restClient.request(url: path, method: Method.POST, params: {
+      "inviteCode": inviteCode
+    });
+  }
+
+  Future<Response> leaveProject({required String path}) {
+    return restClient.request(url: path, method: Method.POST);
+  }
+
   Future<Response> getBoards(
       {required String path, required String projectID}) {
     return restClient

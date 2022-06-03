@@ -163,7 +163,7 @@ class AddProjectView extends GetView<WorkspaceController> {
                     lightSource: LightSource.topLeft),
                 onPressed: () async {
                   AppFocus.unFocus(context);
-                  controller.edit.value?controller.editProject():controller.createProject();
+                  controller.edit.value?controller.editProject(inviteCode: null):controller.createProject();
                 },
                 child: Center(
                   child: Text(

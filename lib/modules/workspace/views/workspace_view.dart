@@ -9,6 +9,7 @@ import 'package:trello_challenge/data/model/params/project_detail_params.dart';
 import 'package:trello_challenge/modules/workspace/views/components/small_avatar.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/widgets/empty_list.dart';
+import 'package:uuid/uuid.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../shared/constants/colors.dart';
 import '../controllers/workspace_controller.dart';
@@ -25,6 +26,38 @@ class WorkspaceView extends GetView<WorkspaceController> {
               backgroundColor: AppColor.appBlue,
               title: const Text('Workspace'),
               actions: [
+                IconButton(
+                  onPressed:(){
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Nhập mã mời'),
+                            content: TextField(
+                              controller: controller.inviteLinkController,
+                              textInputAction: TextInputAction.go,
+                              decoration: const InputDecoration(hintText: '..........'),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child:  const Text('Trở lại'),
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
+                                  child:  const Text('Xác nhận'),
+                                  onPressed: () async {
+                                    await controller.joinProject(inviteLink: controller.inviteLinkController.text);
+                                  }
+                              )
+                            ],
+                          );
+                        });
+                  },
+                  icon: const Icon(Icons.insert_link),
+                  tooltip: 'Tham gia dự án',
+                ),
                 IconButton(
                     onPressed:(){
                       controller.initCreateProject(name: '', description: '', type: '');
@@ -145,6 +178,16 @@ class WorkspaceView extends GetView<WorkspaceController> {
                                         );
                                         Get.toNamed(Routes.ADD_PROJECT);
                                         break;
+                                      case 'invite':
+                                        controller.initCreateProject(
+                                            name: state.data[index].name??'',
+                                            description: state.data[index].description??'',
+                                            type: state.data[index].type??'',
+                                            isEdit: true,
+                                            projectID: state.data[index].id
+                                        );
+                                        controller.editProject(inviteCode: const Uuid().v1());
+                                        break;
                                       default:
                                     }
                                   },
@@ -169,6 +212,17 @@ class WorkspaceView extends GetView<WorkspaceController> {
                                           ],
                                         )
                                     ),
+                                    PopupMenuItem<String>(
+                                        value: 'invite',
+                                        child: Row(
+                                          children: [
+                                            Icon(CupertinoIcons.link, size: 15, color: AppColor.appBlue),
+                                            const Gap(15),
+                                            const Text('Tạo liên kết mời'),
+                                          ],
+                                        )
+                                    ),
+
                                   ],
                                 ),
                               ],

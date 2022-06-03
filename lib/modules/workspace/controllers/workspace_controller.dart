@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:trello_challenge/data/api/repository/project_repository.dart';
 import 'package:trello_challenge/data/model/request/create_project_request.dart';
@@ -15,6 +16,8 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController typeController = TextEditingController();
+  TextEditingController inviteLinkController = TextEditingController();
+
   RxBool private = RxBool(true);
   RxBool edit = RxBool(false);
   RxString projectId = RxString('');
@@ -76,16 +79,24 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
     }
   }
 
-  void editProject() async {
+  void editProject({String? inviteCode}) async {
     if(nameController.text.isNotEmpty && nameController.text.length >= 3){
       CommonWidget.showLoading();
       try {
         await projectRepository.editProject(projectID: projectId.value, data: CreateProjectRequest(
             name: nameController.text,
             description: descriptionController.text,
-            type: typeController.text
+            type: typeController.text,
+            inviteCode: inviteCode
         ));
         CommonWidget.hideLoading();
+        if(inviteCode != null ){
+          Clipboard.setData(
+              ClipboardData(text: 'https://chillo.stupd.dev/invite/${projectId.value}/$inviteCode'))
+              .then((_) {
+            CommonWidget.toast('Đã copy liên kết mời vào bộ nhớ tạm');
+          });
+        }
         Get.back();
         getProjects();
       } catch (e) {
@@ -94,6 +105,20 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
       }
     } else{
       CommonWidget.toast('Tên dự án chứa ít nhất 3 kí tự và không được để trống');
+    }
+  }
+
+  Future<void> joinProject({required String inviteLink}) async {
+    CommonWidget.showLoading();
+    try {
+      List<String> temp = inviteLink.split('/');
+      await projectRepository.joinProject(projectID: temp[temp.length - 2], inviteCode: temp[temp.length - 1]);
+      CommonWidget.hideLoading();
+      Get.back();
+      getProjects();
+    } catch (e) {
+      CommonWidget.hideLoading();
+      Get.dialog( CustomDialog(dialogType: DialogType.failed, message: e.toString()));
     }
   }
 

@@ -461,152 +461,192 @@ class _BoardViewExampleState extends State<BoardViewExample> {
       enableDrag: true,
       backgroundColor: Colors.transparent,
       builder: (_) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.8,
-          minChildSize: 0.2,
-          maxChildSize: 0.8,
-          builder: (_, controller) {
-            return KeyboardDismissOnTap(
-              child: Container(
-                color: Colors.white,
-                child: ListView(
-                  padding: const EdgeInsets.all(20),
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 2/0.8,
-                      child: img.isNotEmpty?
-                      InkWell(
-                        onTap: onPressedImage,
-                        child: Image.network(img, fit: BoxFit.cover)):
-                      InkWell(
-                        onTap: onPressedImage,
-                        child: Container(
-                          color: Colors.grey.withOpacity(0.6),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                            Icon(Icons.image),
-                            Gap(10),
-                            Text('Thêm ảnh')
-                          ]),
-                        ),
-                      )
-                    ),
-                    const Gap(15),
-                    Visibility(
-                      visible: img.isNotEmpty,
-                      child: Row(
-                        children: [
-                          const Spacer(),
-                          ElevatedButton(
-                            onPressed: onPressedDeleteImage,
-                            child: Row(children: const [
-                              Icon(Icons.delete, size: 15),
-                              Gap(10),
-                              Text('Xóa ảnh', style: TextStyle(
-                                fontSize: 12
-                              ))
-                            ])
-                          )
-                        ],
-                      ),
-                    ),
-                    const Gap(15),
-                    Text(
-                        taskName,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    const Divider(thickness: 2),
-                    const Gap(15),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: const [
-                        Icon(Icons.sort, size: 15),
-                        Gap(10),
-                        Text(
-                          'Tên thẻ',
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Gap(10),
-                    TextFormField(
-                      controller: taskNameController,
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        border:OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const Gap(25),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: const [
-                        Icon(Icons.speaker_notes_outlined, size: 15),
-                        Gap(10),
-                        Text(
-                          'Mô tả về thẻ',
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Gap(10),
-                    TextFormField(
-                      maxLines: 3,
-                      controller: textController,
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        border:OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const Gap(10),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState){
+            return DraggableScrollableSheet(
+              initialChildSize: 0.8,
+              minChildSize: 0.2,
+              maxChildSize: 0.8,
+              builder: (_, controller) {
+                return KeyboardDismissOnTap(
+                  child: Container(
+                    color: Colors.white,
+                    child: ListView(
+                      padding: const EdgeInsets.all(20),
                       children: [
-                        const Spacer(),
-                        ElevatedButton(
-                            onPressed: onPressed,
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(Colors.red)
-                            ),
-                            child: Row(children: const [
-                              Icon(Icons.delete, size: 15),
-                              Gap(10),
-                              Text('Xóa thẻ', style: TextStyle(
-                                  fontSize: 12
-                              ))
-                            ])
+                        AspectRatio(
+                            aspectRatio: 2/0.8,
+                            child: img.isNotEmpty?
+                            InkWell(
+                                onTap: onPressedImage,
+                                child: Image.network(img, fit: BoxFit.cover)):
+                            InkWell(
+                              onTap: onPressedImage,
+                              child: Container(
+                                color: Colors.grey.withOpacity(0.6),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(Icons.image),
+                                      Gap(10),
+                                      Text('Thêm ảnh')
+                                    ]),
+                              ),
+                            )
                         ),
-                        const Gap(20),
-                        ElevatedButton(
-                            onPressed: onPressedSave,
-                            child: Row(mainAxisSize: MainAxisSize.min, children: const [
-                               Icon(Icons.save, size: 15),
-                               Gap(10),
-                               Text('Lưu'),
-                            ]))
+                        const Gap(15),
+                        Visibility(
+                          visible: img.isNotEmpty,
+                          child: Row(
+                            children: [
+                              const Spacer(),
+                              ElevatedButton(
+                                  onPressed: onPressedDeleteImage,
+                                  child: Row(children: const [
+                                    Icon(Icons.delete, size: 15),
+                                    Gap(10),
+                                    Text('Xóa ảnh', style: TextStyle(
+                                        fontSize: 12
+                                    ))
+                                  ])
+                              )
+                            ],
+                          ),
+                        ),
+                        const Gap(15),
+                        Text(
+                          taskName,
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        const Divider(thickness: 2),
+                        const Gap(15),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: const [
+                            Icon(Icons.sort, size: 15),
+                            Gap(10),
+                            Text(
+                              'Tên thẻ',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Gap(10),
+                        TextFormField(
+                          controller: taskNameController,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            border:OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        const Gap(25),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: const [
+                            Icon(Icons.speaker_notes_outlined, size: 15),
+                            Gap(10),
+                            Text(
+                              'Mô tả về thẻ',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Gap(10),
+                        TextFormField(
+                          maxLines: 3,
+                          controller: textController,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            border:OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        const Gap(25),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: const [
+                            Icon(Icons.task_alt_sharp, size: 15),
+                            Gap(10),
+                            Text(
+                              'Việc cần làm',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: task.checklist.length,
+                          itemBuilder: (context, index){
+                            return Row(
+                              children: [
+                                Checkbox(value: task.checklist[index].done, onChanged: (value){
+                                  setState(() {
+                                    task.checklist[index].done = !task.checklist[index].done;
+                                  });
+                                }),
+                                TextFormField(
+
+                                ),
+                                const Icon(CupertinoIcons.delete, color: Colors.red)
+                              ],
+                            );
+                          },
+                        ),
+
+                        const Gap(25),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Spacer(),
+                            ElevatedButton(
+                                onPressed: onPressed,
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(Colors.red)
+                                ),
+                                child: Row(children: const [
+                                  Icon(Icons.delete, size: 15),
+                                  Gap(10),
+                                  Text('Xóa thẻ', style: TextStyle(
+                                      fontSize: 12
+                                  ))
+                                ])
+                            ),
+                            const Gap(20),
+                            ElevatedButton(
+                                onPressed: onPressedSave,
+                                child: Row(mainAxisSize: MainAxisSize.min, children: const [
+                                  Icon(Icons.save, size: 15),
+                                  Gap(10),
+                                  Text('Lưu'),
+                                ]))
+                          ],
+                        ),
+
                       ],
                     ),
-
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
-          },
+          }
         );
       },
     );

@@ -38,6 +38,9 @@ dependencies:
   #socket io
   socket_io_client: ^2.0.0-beta.4-nullsafety.0
 
+  #gen uuid
+  uuid: ^3.0.6
+
 dev_dependencies: 
   flutter_lints: ^1.0.0
   flutter_test: 

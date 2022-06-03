@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -21,6 +22,7 @@ class BoardDetailController extends GetxController {
   final ImagePicker _imagePicker = ImagePicker();
 
   BoardDetailController({required this.projectRepository, required this.boardRepository});
+  List<TextEditingController> checkListControllers = [];
   final BoardDetailParams arguments = Get.arguments;
   IO.Socket socket = Get.find();
 

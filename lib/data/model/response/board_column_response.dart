@@ -105,7 +105,7 @@ class Task {
     final List<dynamic> members;
     final String column;
     final bool done;
-    final List<dynamic> checklist;
+    final List<CheckList> checklist;
     final List<dynamic> labels;
     final List<dynamic> attachments;
     final DateTime createdAt;
@@ -121,7 +121,7 @@ class Task {
         members: List<dynamic>.from(json["members"].map((x) => x)),
         column: json["column"],
         done: json["done"],
-        checklist: List<dynamic>.from(json["checklist"].map((x) => x)),
+        checklist: List<CheckList>.from(json["checklist"].map((x) => CheckList.fromJson(x))),
         labels: List<dynamic>.from(json["labels"].map((x) => x)),
         attachments: List<dynamic>.from(json["attachments"].map((x) => x)),
         createdAt: DateTime.parse(json["createdAt"]),
@@ -138,7 +138,7 @@ class Task {
         "members": List<dynamic>.from(members.map((x) => x)),
         "column": column,
         "done": done,
-        "checklist": List<dynamic>.from(checklist.map((x) => x)),
+        "checklist":List<dynamic>.from(checklist.map((x) => x.toJson())),
         "labels": List<dynamic>.from(labels.map((x) => x)),
         "attachments": List<dynamic>.from(attachments.map((x) => x)),
         "createdAt": createdAt.toIso8601String(),
@@ -146,6 +146,30 @@ class Task {
         "id": taskId,
         "image": image,
         "description": description,
+    };
+}
+
+class CheckList {
+    CheckList({
+        required this.uuid,
+        required this.name,
+        required this.done,
+    });
+
+    final String uuid;
+    final String name;
+    bool done;
+
+    factory CheckList.fromJson(Map<String, dynamic> json) => CheckList(
+        uuid: json["uuid"],
+        name: json["name"],
+        done: json["done"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "uuid": uuid,
+        "name": name,
+        "done": done,
     };
 }
 

@@ -21,8 +21,8 @@ class SignUpController extends GetxController{
     if(emailController.text.trim().isNotEmpty
     && userNameController.text.trim().isNotEmpty
     && passwordController.text.trim().isNotEmpty
-    && userNameController.text.trim().length >= 6
-    && passwordController.text.trim().length >=6
+    && userNameController.text.trim().length >= 3
+    && passwordController.text.trim().length >= 6
     && !userNameController.text.trim().contains(' ')
     && !passwordController.text.trim().contains(' ')
     && passwordController.text == reEnterPasswordController.text){
@@ -41,8 +41,8 @@ class SignUpController extends GetxController{
       CommonWidget.toast('Tên đăng nhập không được để trống');
     } else if(passwordController.text.trim().isEmpty){
       CommonWidget.toast('Mật khẩu không được để trống');
-    } else if(userNameController.text.trim().length < 6 || userNameController.text.contains(' ')){
-      CommonWidget.toast('Tên đăng nhập phải chứa ít nhất 6 kí tự và không chứa khoảng trắng');
+    } else if(userNameController.text.trim().length < 3 || userNameController.text.contains(' ')){
+      CommonWidget.toast('Tên đăng nhập phải chứa ít nhất 3 kí tự và không chứa khoảng trắng');
     } else if(passwordController.text.trim().length < 6 || passwordController.text.contains(' ')){
       CommonWidget.toast('Mật khẩu phải chứa ít nhất 6 kí tự và không chứa khoảng trắng');
     } else if(passwordController.text != reEnterPasswordController.text){
