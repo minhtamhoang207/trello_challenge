@@ -48,11 +48,15 @@ class BoardDetailController extends GetxController {
   }
 
   Future<void> addColumn({required String columnName, required int seqNo}) async {
-    await boardRepository.addBoardColumn(
-        boardID: arguments.boardID,
-        columnName: columnName,
-        seqNo: seqNo
-    );
+    try{
+      await boardRepository.addBoardColumn(
+          boardID: arguments.boardID,
+          columnName: columnName,
+          seqNo: seqNo
+      );
+    } catch (e){
+      CommonWidget.toast(e.toString());
+    }
   }
 
   Future<void> editColumn({required String columnName, required int seqNo, required String columnID}) async {
@@ -78,11 +82,15 @@ class BoardDetailController extends GetxController {
   }
 
   Future<void> addTask({required String columnID, required int seqNo, required taskName}) async {
-    await boardRepository.addTask(
-        columnID: columnID,
-        taskName: taskName,
-        seqNo: seqNo
-    );
+    try{
+      await boardRepository.addTask(
+          columnID: columnID,
+          taskName: taskName,
+          seqNo: seqNo
+      );
+    } catch (e){
+      CommonWidget.toast(e.toString());
+    }
   }
 
   Future<void> deleteTask({required String taskID}) async {
@@ -94,6 +102,7 @@ class BoardDetailController extends GetxController {
       Get.find<ProjectDetailController>().getBoards();
     } catch (e) {
       CommonWidget.hideLoading();
+      CommonWidget.toast(e.toString());
     }
   }
 
@@ -115,7 +124,10 @@ class BoardDetailController extends GetxController {
   Future<void> updateTask({required String taskID, required UpdateTaskRequest updateTaskRequest}) async {
     CommonWidget.showLoading();
     try {
-      await boardRepository.updateTask(taskID: taskID, updateTaskRequest: updateTaskRequest);
+      await boardRepository.updateTask(
+          taskID: taskID,
+          updateTaskRequest: updateTaskRequest
+      );
       CommonWidget.hideLoading();
       Get.back();
     } catch (e) {
@@ -148,6 +160,7 @@ class BoardDetailController extends GetxController {
       Get.find<ProjectDetailController>().getBoards();
     } catch (e) {
       CommonWidget.hideLoading();
+      CommonWidget.toast(e.toString());
     }
   }
 
@@ -158,6 +171,7 @@ class BoardDetailController extends GetxController {
       CommonWidget.hideLoading();
     } catch (e) {
       CommonWidget.hideLoading();
+      CommonWidget.toast(e.toString());
     }
   }
 
@@ -168,6 +182,7 @@ class BoardDetailController extends GetxController {
       CommonWidget.hideLoading();
     } catch (e) {
       CommonWidget.hideLoading();
+      CommonWidget.toast(e.toString());
     }
   }
 

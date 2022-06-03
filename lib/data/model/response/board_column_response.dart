@@ -157,7 +157,7 @@ class CheckList {
     });
 
     final String uuid;
-    final String name;
+    String name;
     bool done;
 
     factory CheckList.fromJson(Map<String, dynamic> json) => CheckList(

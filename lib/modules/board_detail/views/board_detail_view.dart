@@ -13,6 +13,7 @@ import 'package:trello_challenge/data/model/response/board_column_response.dart'
 import 'package:trello_challenge/routes/app_pages.dart';
 import 'package:trello_challenge/shared/constants/colors.dart';
 import 'package:trello_challenge/shared/utils/color_extension.dart';
+import 'package:uuid/uuid.dart';
 import '../../../data/model/params/board_detail_params.dart';
 import '../../../gen/assets.gen.dart';
 import '../controllers/board_detail_controller.dart';
@@ -101,6 +102,8 @@ class _BoardViewExampleState extends State<BoardViewExample> {
   TextEditingController textController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController taskNameController = TextEditingController();
+  TextEditingController todoController = TextEditingController();
+  final Uuid uuid= const Uuid();
 
   final Socket socket = Get.find();
 
@@ -249,7 +252,8 @@ class _BoardViewExampleState extends State<BoardViewExample> {
                       taskName: taskNameController.text.isNotEmpty? taskNameController.text:null,
                       columnID: controller.listData[listIndex!].id,
                       seqNo: itemIndex!,
-                      description: descriptionController.text.isNotEmpty?descriptionController.text:null
+                      description: descriptionController.text.isNotEmpty?descriptionController.text:null,
+                      checkList: itemObject.checklist
                   ));
               descriptionController.clear();
               taskNameController.clear();
@@ -578,18 +582,57 @@ class _BoardViewExampleState extends State<BoardViewExample> {
                         const Gap(25),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
-                            Icon(Icons.task_alt_sharp, size: 15),
-                            Gap(10),
-                            Text(
+                          children: [
+                            const Icon(Icons.task_alt_sharp, size: 15),
+                            const Gap(10),
+                            const Text(
                               'Việc cần làm',
                               style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold
                               ),
                             ),
+                            const Spacer(),
+                            InkWell(
+                                onTap: (){
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text('Tên công việc'),
+                                          content: TextField(
+                                            controller: todoController,
+                                            textInputAction: TextInputAction.go,
+                                            decoration: const InputDecoration(hintText: ''),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child:  const Text('Trở lại'),
+                                              onPressed: () async {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                                child:  const Text('Xác nhận'),
+                                                onPressed: (){
+                                                  setState((){
+                                                    task.checklist.add(CheckList(
+                                                        uuid: uuid.v1(),
+                                                        name: todoController.text,
+                                                        done: false
+                                                    ));
+                                                  });
+                                                  Get.back();
+                                                }
+                                            )
+                                          ],
+                                        );
+                                      });
+                                },
+                                child: const Icon(Icons.add))
                           ],
                         ),
+                        const Gap(15),
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -602,10 +645,44 @@ class _BoardViewExampleState extends State<BoardViewExample> {
                                     task.checklist[index].done = !task.checklist[index].done;
                                   });
                                 }),
-                                TextFormField(
-
-                                ),
-                                const Icon(CupertinoIcons.delete, color: Colors.red)
+                                Expanded(child: Text(task.checklist[index].name)),
+                                IconButton(onPressed: (){
+                                  todoController.text = task.checklist[index].name;
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text('Tên công việc'),
+                                          content: TextField(
+                                            controller: todoController,
+                                            textInputAction: TextInputAction.go,
+                                            decoration: const InputDecoration(hintText: ''),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child:  const Text('Trở lại'),
+                                              onPressed: () async {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                                child:  const Text('Xác nhận'),
+                                                onPressed: (){
+                                                  setState((){
+                                                    task.checklist[index].name = todoController.text;
+                                                  });
+                                                  Get.back();
+                                                }
+                                            )
+                                          ],
+                                        );
+                                      });
+                                }, icon: const Icon(Icons.edit)),
+                                IconButton(onPressed: (){
+                                  setState((){
+                                    task.checklist.removeAt(index);
+                                  });
+                                }, icon: const Icon(Icons.delete))
                               ],
                             );
                           },
@@ -639,6 +716,8 @@ class _BoardViewExampleState extends State<BoardViewExample> {
                                 ]))
                           ],
                         ),
+
+                        const Gap(200)
 
                       ],
                     ),

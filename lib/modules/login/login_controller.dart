@@ -70,7 +70,12 @@ class LoginController extends GetxController {
             data: LoginRequest(
                 userName: userNameController.text,
                 password: passwordController.text));
-        _sharedPreferences.setString(StorageConstants.token, response.data.accessToken);
+        _sharedPreferences.setString(
+            StorageConstants.token, response.data.accessToken
+        );
+        _sharedPreferences.setString(
+            StorageConstants.userID, response.data.user.id
+        );
         await connectAndListen(token: response.data.accessToken);
         CommonWidget.hideLoading();
         Get.offAllNamed(Routes.home);

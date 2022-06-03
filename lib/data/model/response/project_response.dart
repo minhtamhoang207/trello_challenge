@@ -76,6 +76,7 @@ class User {
     this.bio,
     this.nickname,
     this.avatar,
+    this.role
   });
 
   String id;
@@ -85,6 +86,7 @@ class User {
   String? bio;
   String? nickname;
   String? avatar;
+  String? role;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["_id"],
@@ -94,6 +96,7 @@ class User {
     bio: json["bio"]??'',
     nickname: json["nickname"]??'',
     avatar: json["avatar"]??'',
+    role: json["role"]??''
   );
 }
 

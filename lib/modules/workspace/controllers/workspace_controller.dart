@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trello_challenge/data/api/repository/project_repository.dart';
 import 'package:trello_challenge/data/model/request/create_project_request.dart';
 import 'package:trello_challenge/data/model/response/project_response.dart';
+import 'package:trello_challenge/shared/constants/storage.dart';
 import 'package:trello_challenge/shared/utils/common_widget.dart';
 
 import '../../../shared/enums/dialog_type.dart';
@@ -45,6 +47,18 @@ class WorkspaceController extends GetxController with StateMixin<ProjectResponse
       CommonWidget.hideLoading();
       change(ProjectResponse(data: []), status: RxStatus.error(e.toString()));
     }
+  }
+
+  bool checkRole(List<ProjectMember> listMember){
+    final currentUser = Get.find<SharedPreferences>().getString(StorageConstants.userID);
+    for (int i=0 ; i < listMember.length; i++){
+      if(listMember[i].user.id == currentUser){
+        if(listMember[i].role == 'ADMIN'){
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   void deleteProject(String projectID) async {

@@ -8,6 +8,7 @@ import 'package:lottie/lottie.dart';
 import 'package:trello_challenge/data/model/params/project_detail_params.dart';
 import 'package:trello_challenge/modules/workspace/views/components/small_avatar.dart';
 import 'package:trello_challenge/routes/app_pages.dart';
+import 'package:trello_challenge/shared/utils/common_widget.dart';
 import 'package:trello_challenge/shared/widgets/empty_list.dart';
 import 'package:uuid/uuid.dart';
 import '../../../gen/assets.gen.dart';
@@ -83,6 +84,7 @@ class WorkspaceView extends GetView<WorkspaceController> {
                   itemCount: state.data.length,
                   separatorBuilder: (context, index) => const Gap(15),
                   itemBuilder: (context, index){
+                    final checkRole = controller.checkRole(state.data[index].members);
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: InkWell(
@@ -179,14 +181,18 @@ class WorkspaceView extends GetView<WorkspaceController> {
                                         Get.toNamed(Routes.ADD_PROJECT);
                                         break;
                                       case 'invite':
-                                        controller.initCreateProject(
-                                            name: state.data[index].name??'',
-                                            description: state.data[index].description??'',
-                                            type: state.data[index].type??'',
-                                            isEdit: true,
-                                            projectID: state.data[index].id
-                                        );
-                                        controller.editProject(inviteCode: const Uuid().v1());
+                                        if(checkRole){
+                                          controller.initCreateProject(
+                                              name: state.data[index].name??'',
+                                              description: state.data[index].description??'',
+                                              type: state.data[index].type??'',
+                                              isEdit: true,
+                                              projectID: state.data[index].id
+                                          );
+                                          controller.editProject(inviteCode: const Uuid().v1());
+                                        } else{
+                                          CommonWidget.toast('Vui lòng liên hệ người sở hữu dự án');
+                                        }
                                         break;
                                       default:
                                     }
