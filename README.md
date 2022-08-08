@@ -1,3 +1,2 @@
-LTW_PTIT 
-Chillo
-(trello clone)
+Lập trình web - PTIT
+- Chillo (a simple clone of trello :D )
